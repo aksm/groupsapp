@@ -17,8 +17,12 @@
   },
   "homepage": "https://github.com/aksm/groupsapp#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.6",
     "materialize-css": "^0.97.8",
+    "method-override": "^2.3.6",
     "mysql": "^2.12.0",
     "passport": "^0.3.2",
     "sequelize": "^3.26.0",
