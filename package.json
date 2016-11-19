@@ -20,6 +20,7 @@
     "express": "^4.14.0",
     "materialize-css": "^0.97.8",
     "mysql": "^2.12.0",
+    "passport": "^0.3.2",
     "sequelize": "^3.26.0",
     "twilio": "^2.11.0"
   }
