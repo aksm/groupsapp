@@ -15,7 +15,23 @@ nav .brand-logo {
   height: 60px;
   padding-top: 5px;
 }
-
+.login-row {
+  margin-bottom: 5px;
+}
+.login-img {
+  height: 34px;
+  margin: 1px;
+}
+.login-btn {
+  padding-left: 1px;
+  min-width: 290px;
+  max-width: 290px;
+}
+.modal {
+  min-width: 340px !important;
+  max-width: 340px !important;
+  max-height: 250px !important;
+}
 p {
   line-height: 2rem;
 }

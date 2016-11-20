@@ -5,11 +5,11 @@
         <li><a href="#">Dashboard</a></li>
       </ul>
  -->
-      <ul id="nav-mobile" class="side-nav">
+{{!--       <ul id="nav-mobile" class="side-nav">
         <li><a href="#">Dashboard</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-    </div>
+    </div> --}}
   </nav>
 
   <div id="index-banner" class="parallax-container">
@@ -21,7 +21,7 @@
           <h5 class="header col s12 light">Get Together. Get Organized.</h5>
         </div>
         <div class="row center">
-          <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light green accent-4">Get Started</a>
+          <a href="#login" id="download-button" class="btn-large waves-effect waves-light green accent-4 modal-trigger">Get Started</a>
         </div>
         <br><br>
 
@@ -29,7 +29,47 @@
     </div>
     <div class="parallax"><img src="assets/images/background1.jpg" alt="Unsplashed background img 1"></div>
   </div>
+  <!-- Login or register modal -->
+  <div id="login" class="modal">
+    <div class="modal-content">
+        <div class="row login-row">
+            <button type="submit" class="btn waves-effect waves-light col s12 white black-text login-btn" id="google-btn"><img class="col s2 left white login-img" src="assets/images/google-login.svg">Sign in with Google</button>
+        </div>
+        <div class="row login-row">
+            <button type="submit" class="btn waves-effect waves-light col s12 white black-text login-btn" id="facebook-btn"><img class="col s2 left white login-img" src="assets/images/fb-login.svg">Sign in with Facebook</button>
+        </div>
+        <div class="row login-row">
+            <button type="submit" class="btn waves-effect waves-light col s12 black-text white login-btn" id="twitter-btn"><img class="col s2 left white login-img" src="assets/images/twitter-login.svg">Sign in with Twitter</button>
+        </div>
+        <div class="row login-row">
+            <button type="submit" class="btn waves-effect waves-light col s12 black-text white login-btn" id="linkedin-btn"><img class="col s2 left white login-img" src="assets/images/linkedin-login.svg">Sign in with Linkedin</button>
+        </div>
+    <!-- email password Login -->
+{{!--       <form id="login-form" onsubmit="return false">
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">person outline</i>
+            <input name="email" class="validate" id="email" type="email">
+            <label for="email" data-error="wrong" data-success="right">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock outline</i>
+            <input name="password" id="password" type="password">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <button type="submit" class="btn waves-effect waves-light col s12 cyan" id="login-button">Login</button>
+          </div>
+        </div>
+        </form> --}}
+      </div>
 
 
   <div class="container">
     <div class="section">
+    </div>
+  </div>
