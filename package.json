@@ -18,6 +18,7 @@
   "homepage": "https://github.com/aksm/groupsapp#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "dotenv": "^2.0.0",
     "express": "^4.14.0",

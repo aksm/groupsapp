@@ -28,20 +28,21 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use('/assets',express.static(__dirname + '/app/public/assets'));
 
 // Set handlebars
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
-app.get('/', function(req, res) {
-	res.render('index');
-});
-app.get('/dashboard', function(req, res) {
-	res.render('index');
-});
+// app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+// app.set('view engine', 'handlebars');
+// app.get('/', function(req, res) {
+// 	res.render('index');
+// });
 
 // Routes
 // =============================================================
 require("./app/routes/api-routes.js")(app);
 require("./app/routes/auth-routes.js")(app);
 
+// app.get('/dashboard', require("connect-ensure-login").ensureLoggedIn(),
+// 	function(req, res) {
+// 		res.render('dashboard');
+// });
 
 // Listener
 // =============================================================
