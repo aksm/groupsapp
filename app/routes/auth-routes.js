@@ -28,7 +28,8 @@ app.get('/login', function(req, res) {
 passport.use(new Strategy({
   clientID: process.env.FB_CLIENT_ID || '1826103597601691',
   clientSecret: process.env.FB_CLIENT_SECRET || '1c5d8736244d4ecadc89fe7c0384eff0',
-  callbackURL: 'http://localhost:3000/login/facebook/return'
+  // callbackURL: 'http://localhost:3000/login/facebook/return'
+  callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 },
   function(accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
