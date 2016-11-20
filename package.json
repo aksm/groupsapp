@@ -18,13 +18,18 @@
   "homepage": "https://github.com/aksm/groupsapp#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.14.2",
     "handlebars": "^4.0.6",
     "materialize-css": "^0.97.8",
     "method-override": "^2.3.6",
+    "morgan": "^1.7.0",
     "mysql": "^2.12.0",
     "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
     "sequelize": "^3.27.0",
     "twilio": "^2.11.0"
   }

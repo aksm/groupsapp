@@ -33,11 +33,14 @@ app.set('view engine', 'handlebars');
 app.get('/', function(req, res) {
 	res.render('index');
 });
+app.get('/dashboard', function(req, res) {
+	res.render('index');
+});
 
 // Routes
 // =============================================================
 require("./app/routes/api-routes.js")(app);
-// require("./app/routes/html-routes.js")(app);
+require("./app/routes/auth-routes.js")(app);
 
 
 // Listener
