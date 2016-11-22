@@ -20,9 +20,9 @@ var Event = sequelize.define("Event", {
 },
 {
     timestamps: false
-})
+});
 
 // Sync with DB
-Event.sync()
+Event.sync();
 
 module.exports = Event;

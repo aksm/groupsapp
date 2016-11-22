@@ -20,6 +20,6 @@ var Organization = sequelize.define("Organization", {
 });
 
 // Sync with DB
-Organization.sync()
+Organization.sync();
 
 module.exports = Organization;
