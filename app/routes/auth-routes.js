@@ -6,7 +6,10 @@ var fbStrategy = require('passport-facebook').Strategy;
 var googleStrategy = require('passport-google-oauth2').Strategy;
 var path = require('path');
 
-
+// monkeypatch because passport uses the google plus API which isn't available for google apps for enterprise.
+googleStrategy.prototype.userProfile = function(token, done) {
+  done(null, {});
+};
 
 module.exports = function(app) {
 
@@ -104,10 +107,6 @@ app.get('/login/google/return',
   });
 
 function ensureAuthenticated(req, res, next) {
-	// console.log(req._passport);
-	// console.log(req._passport.instance);
-	console.log(req._passport.instance._userProperty);
-	// console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     // req.user is available for use here
     return next(); }
@@ -117,7 +116,6 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.get('/dashboard', ensureAuthenticated, function(req, res) {
-	console.log('DID THIS HAPPEN?');
 	res.render('dashboard');
 });
 // app.get('/dashboard',
