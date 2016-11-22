@@ -34,11 +34,14 @@ function show(element) {
     });
     $('.group-post').on('submit', function(event) {
     	event.preventDefault();
+    	var form = $(this);
     	var group = $(this).find('input').val();
     	var route = $(this).data('route');
-    	$.post(route, {'group': group});
-    	$(this)[0].reset();
-	    $('#select-group').modal('close');
+    	$.post(route, {'group': group})
+    	.done(function(data) {
+	    	form[0].reset();
+		    $('#select-group').modal('close');
+    	});
 
     });
   }); // end of document ready
