@@ -13,8 +13,8 @@ module.exports = function(app) {
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
-// app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+// app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
 
 app.set('views', path.join(__dirname, '../../views'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -30,8 +30,8 @@ app.get('/login', function(req, res) {
 passport.use(new Strategy({
   clientID: process.env.FB_CLIENT_ID || '1826103597601691',
   clientSecret: process.env.FB_CLIENT_SECRET || '1c5d8736244d4ecadc89fe7c0384eff0',
-  // callbackURL: 'http://localhost:3000/login/facebook/return'
-  callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
+  callbackURL: 'http://localhost:3000/login/facebook/return'
+  // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 },
   function(accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
