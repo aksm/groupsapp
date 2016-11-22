@@ -10,7 +10,12 @@ nav ul a,
 nav .brand-logo {
   color: #444;
 }
-
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
 #logo {
   height: 60px;
   padding-top: 5px;
@@ -27,7 +32,7 @@ nav .brand-logo {
   min-width: 290px;
   max-width: 290px;
 }
-.modal {
+#login {
   min-width: 340px !important;
   max-width: 340px !important;
   max-height: 250px !important;
@@ -46,10 +51,13 @@ p {
   height: auto;
   color: rgba(255,255,255,.9);
 }
-  .parallax-container .section {
-    width: 100%;
-  }
+.parallax-container .section {
+  width: 100%;
+}
 
+#select-group {
+  max-width: 500px !important;  
+}
 @media only screen and (max-width : 992px) {
   .parallax-container .section {
     position: absolute;

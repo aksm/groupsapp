@@ -40,4 +40,44 @@
       </div>
 
     </div>
+    <div id="select-group" class="modal">
+      <div class="modal-content">
+          {{!-- Button to create group --}}
+          <div class="row center-align">
+              <a class="btn waves-effect waves-light green accent-4 white-text group-action" id="group-add">Create a Group</a>
+          </div>
+
+          {{!-- Form to create group --}}
+          <form method="POST" class="col s12 hide center-align" id="group-add-form" action="/org/add">
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix green-text text-accent-4" id="group-add-icon">group</i>
+                <input id="group-name" type="text" class="validate" required="required">
+                <label for="group-name">Group Name</label>
+              </div>
+            </div>
+            <button class="btn waves-effect waves-light green accent-4" type="submit" name="action">Create Group
+            </button>
+          </form>
+
+            {{!-- Button to join group --}}
+           <div class="row center-align">
+              <a class="btn waves-effect waves-light green accent-4 white-text group-action" id="group-join">Join a Group</a>
+          </div>
+
+          {{!-- Form to join group --}}
+          <form method="POST" class="col s12 hide center-align" id="group-join-form" action="/org/join">
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix green-text text-accent-4">group</i>
+                <input id="group-id" type="text" class="validate" required="required">
+                <label for="group-id">Group ID (Contact Administrator for ID)</label>
+              </div>
+            </div>
+            <button class="btn waves-effect waves-light green accent-4" type="submit" name="action">Join Group
+            </button>
+          </form>
+
+    </div>
+
   </section>

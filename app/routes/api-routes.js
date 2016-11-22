@@ -103,4 +103,19 @@ module.exports = function(app) {
                 });
         }
     });
+
+    app.post("/org/:action?", function(req, res) {
+        switch(req.params.action) {
+            case "add":
+                console.log("group added");
+                res.redirect("/dashboard");
+            break;
+            case "join":
+                console.log("group joined");
+                res.redirect("/dashboard");
+            break;
+            default:
+            console.log("WTF happened?");
+        }
+    });
 };
