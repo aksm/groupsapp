@@ -14,7 +14,7 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 // app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, maxAge: 60000 }));
+app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
 
 app.set('views', path.join(__dirname, '../../views'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
