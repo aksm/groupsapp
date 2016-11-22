@@ -24,7 +24,6 @@
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",
-    "express-session": "^1.14.2",
     "handlebars": "^4.0.6",
     "materialize-css": "^0.97.8",
     "method-override": "^2.3.6",
