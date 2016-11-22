@@ -107,11 +107,11 @@ module.exports = function(app) {
     app.post("/org/:action?", function(req, res) {
         switch(req.params.action) {
             case "add":
-                console.log("group added");
+                console.log(req.body.group+" created.");
                 res.redirect("/dashboard");
             break;
             case "join":
-                console.log("group joined");
+                console.log(req.body.group+" joined.");
                 res.redirect("/dashboard");
             break;
             default:

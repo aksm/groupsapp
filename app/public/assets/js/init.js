@@ -32,5 +32,14 @@ function show(element) {
     		console.log('error');
     	}
     });
+    $('.group-post').on('submit', function(event) {
+    	event.preventDefault();
+    	var group = $(this).find('input').val();
+    	var route = $(this).data('route');
+    	$.post(route, {'group': group});
+    	$(this)[0].reset();
+	    $('#select-group').modal('close');
+
+    });
   }); // end of document ready
 })(jQuery); // end of jQuery name space
