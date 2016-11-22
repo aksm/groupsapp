@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var exphbs = require('express-handlebars');
 var passport = require('passport');
-var Strategy = require('passport-facebook').Strategy;
+var fbStrategy = require('passport-facebook').Strategy;
+var googleStrategy = require('passport-google-oauth2').Strategy;
 var path = require('path');
 
 
@@ -27,9 +28,9 @@ app.get('/login', function(req, res) {
   res.redirect('/');
 });
 // Passport / Facebook Authentication Information
-passport.use(new Strategy({
-  clientID: process.env.FB_CLIENT_ID || '1826103597601691',
-  clientSecret: process.env.FB_CLIENT_SECRET || '1c5d8736244d4ecadc89fe7c0384eff0',
+passport.use(new fbStrategy({
+  clientID: process.env.FB_CLIENT_ID,
+  clientSecret: process.env.FB_CLIENT_SECRET,
   // callbackURL: 'http://localhost:3000/login/facebook/return'
   callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 },
@@ -42,6 +43,20 @@ passport.use(new Strategy({
     return cb(null, profile);
 }));
 
+// Use the GoogleStrategy within Passport.
+passport.use(new googleStrategy({
+    clientID: process.env.G_CLIENT_ID,
+    clientSecret: process.env.G_CLIENT_SECRET,
+    // callbackURL: "http://localhost:3000/login/google/return",
+	callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
+    passReqToCallback   : true
+  },
+  function(User, request, accessToken, refreshToken, profile, done) {
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return done(null, profile);
+    // });
+  }
+));
 
 // Here we start our Passport process and initiate the storage of sessions (i.e. closing browser maintains user)
 app.use(passport.initialize());
@@ -65,7 +80,34 @@ app.get('/login/facebook/return',
   function(req, res) {
     res.redirect('/dashboard');
   });
+
+// GET /auth/google
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Google authentication will involve redirecting
+//   the user to google.com.  After authenticating, Google will redirect the
+//   user back to this application at /auth/google/return
+app.get('/login/google', passport.authenticate('google', { scope: 
+  	[ 'https://www.googleapis.com/auth/plus.login',
+  	'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
+));
+
+// GET /auth/google/return
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/login/google/return', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  function(req, res) {
+  	console.log(res);
+    res.redirect('/dashboard');
+  });
+
 function ensureAuthenticated(req, res, next) {
+	// console.log(req._passport);
+	// console.log(req._passport.instance);
+	console.log(req._passport.instance._userProperty);
+	// console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     // req.user is available for use here
     return next(); }
@@ -75,6 +117,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 app.get('/dashboard', ensureAuthenticated, function(req, res) {
+	console.log('DID THIS HAPPEN?');
 	res.render('dashboard');
 });
 // app.get('/dashboard',
