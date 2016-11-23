@@ -42,8 +42,10 @@ module.exports = function(app) {
 	    // be associated with a user record in the application's database, which
 	    // allows for account linking and authentication with other identity
 	    // providers.
-	    console.log(profile.id);
-	    return cb(null, profile);
+	    // User.findOrCreate({ : profile.id }, function (err, user) {
+		    console.log(profile.id);
+		    return cb(null, profile);
+	    // });
 	}));
 
 	// Use the GoogleStrategy within Passport.

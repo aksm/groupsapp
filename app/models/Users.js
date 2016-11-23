@@ -11,7 +11,10 @@ var sqlUser = sequelize.define("User", {
     primaryKey: true
   },
   user_name: Sequelize.STRING,
-  fb_login: Sequelize.STRING,
+  facebook_id: Sequelize.STRING,
+  google_id: Sequelize.STRING,
+  twitter_id: Sequelize.STRING,
+  linkedin_id: Sequelize.STRING,
   f_name: Sequelize.STRING,
   l_name: Sequelize.STRING,
   email: Sequelize.STRING,
