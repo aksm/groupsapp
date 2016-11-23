@@ -18,7 +18,11 @@ var sqlUser = sequelize.define("User", {
   f_name: Sequelize.STRING,
   l_name: Sequelize.STRING,
   email: Sequelize.STRING,
-  created_timestamp: Sequelize.STRING
+  created_timestamp: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW,
+    allowNull: false
+  }
 },
 {
     timestamps: false

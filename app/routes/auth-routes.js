@@ -42,9 +42,24 @@ module.exports = function(app) {
 	    // be associated with a user record in the application's database, which
 	    // allows for account linking and authentication with other identity
 	    // providers.
-	    // User.findOrCreate({ : profile.id }, function (err, user) {
-		    console.log(profile.id);
-		    return cb(null, profile);
+	   //  User.findOrCreate({where: {facebook_id : profile.id }})
+		  // .spread(function(user, created) {
+		  //   console.log(user.get({
+		  //     plain: true
+		  //   }));
+		  //   console.log(created);
+
+    /*
+      {
+        username: 'sdepold',
+        job: 'Technical Lead JavaScript',
+        id: 1,
+        createdAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET),
+        updatedAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET)
+      }
+      created: true
+    */
+    return cb(null, profile);
 	    // });
 	}));
 
