@@ -4,8 +4,6 @@ var exphbs = require('express-handlebars');
 var passport = require('passport');
 var fbStrategy = require('passport-facebook').Strategy;
 var googleStrategy = require('passport-google-oauth2').Strategy;
-var Strategy = require('passport-facebook').Strategy;
-var LocalStrategy = require('passport-local');
 var path = require('path');
 var User = require('../models/Users.js');
 // var session = require('express-session');
@@ -28,12 +26,12 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 // app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
 
-    app.set('views', path.join(__dirname, '../../views'));
-    app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
-    app.set('view engine', 'handlebars');
-    app.get('/', function(req, res) {
-        res.render('index');
-    });
+app.set('views', path.join(__dirname, '../../views'));
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+app.get('/', function(req, res) {
+	res.render('index');
+});
 
 app.get('/login', function(req, res) {
   res.redirect('/');
@@ -71,28 +69,28 @@ passport.use(new googleStrategy({
   }
 ));
 
-    // Here we start our Passport process and initiate the storage of sessions (i.e. closing browser maintains user)
-    app.use(passport.initialize());
-    app.use(passport.session());
+// Here we start our Passport process and initiate the storage of sessions (i.e. closing browser maintains user)
+app.use(passport.initialize());
+app.use(passport.session());
 
-    passport.serializeUser(function(user, cb) {
-        cb(null, user);
-    });
+passport.serializeUser(function(user, cb) {
+  cb(null, user);
+});
 
-    passport.deserializeUser(function(obj, cb) {
-        cb(null, obj);
-    });
+passport.deserializeUser(function(obj, cb) {
+  cb(null, obj);
+});
 
-    // Initiate the Facebook Authentication
-    app.get('/login/facebook', passport.authenticate('facebook'));
+// Initiate the Facebook Authentication
+app.get('/login/facebook', passport.authenticate('facebook'));
 
-    // When Facebook is done, it uses the below route to determine where to go
-    app.get('/login/facebook/return',
-        passport.authenticate('facebook', { failureRedirect: '/' }),
+// When Facebook is done, it uses the below route to determine where to go
+app.get('/login/facebook/return',
+  passport.authenticate('facebook', { failureRedirect: '/' }),
 
-        function(req, res) {
-            res.redirect('/dashboard');
-        });
+  function(req, res) {
+    res.redirect('/dashboard');
+  });
 
 // GET /auth/google
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -133,32 +131,4 @@ app.get('/dashboard', ensureAuthenticated, function(req, res) {
 // 		res.render('dashboard');
 // });
 
-///////////////////////////////////////
-///Passport username authentication///
-/////////////////////////////////////
-// passport.use(new LocalStrategy(
-//     function(username, password, done) {
-//         User.findOne({ username: username }, function(err, user) {
-//             if (err) {
-//                 return done(err);
-//             }
-//             if (!user) {
-//                 return done(null, false, { message: 'Incorrect username.' });
-//             }
-//             if (!user.validPassword(password)) {
-//                 return done(null, false, { message: 'Incorrect password.' });
-//             }
-//             return done(null, user);
-//         });
-//     }
-// ));
-
-/////////////////////////////////
-///Logout///////////////////////
-///////////////////////////////
-// document.getElementById("logout").addEventListener("click", function() {
-    app.get('/logout', function(req, res) {
-        req.logout();
-        res.redirect('/');
-    });
-// });
+};
