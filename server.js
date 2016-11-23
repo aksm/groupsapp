@@ -27,27 +27,14 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 // Set static
 app.use('/assets',express.static(__dirname + '/app/public/assets'));
 
-// Set handlebars
-// app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
-// app.set('view engine', 'handlebars');
-// app.get('/', function(req, res) {
-// 	res.render('index');
-// });
 
 // Routes
 // =============================================================
 require("./app/routes/api-routes.js")(app);
 require("./app/routes/auth-routes.js")(app);
 
-// app.get('/dashboard', require("connect-ensure-login").ensureLoggedIn(),
-// 	function(req, res) {
-// 		res.render('dashboard');
-// });
 
 // Listener
 // =============================================================
 
-// app.listen(PORT, function(){
-//     console.log('App listening on PORT ' + PORT);
-// })
 app.listen(app.get("port"), function() {console.log("Hollaback on port: "+app.get("port"));});
