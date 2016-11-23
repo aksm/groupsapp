@@ -5,13 +5,14 @@ var now = moment();
 
 		$(addUser).on("click", function() {
 
-		    var newUser =
+		    var newUser = sequuelize.define("newUser", {
 
 		        user_id: {
 		            type: Sequelize.INTEGER,
 		            autoIncrement: true,
 		            primaryKey: true
 		        },
+
 		        user_name: Sequelize.STRING,
 		        fb_login: Sequelize.STRING,
 		        f_name: Sequelize.STRING,
@@ -19,22 +20,22 @@ var now = moment();
 		        email: Sequelize.STRING,
 		        created_timestamp: Sequelize.STRING 
 
-		        {
+		        }, {
 		            user_name: $("#user_name").val().trim(),
 		            fb_login: $("#fb_login").val().trim(),
 		            f_name: $("#f_name").val().trim(),
 		            l_name: $("#l_name").val().trim(),
 		            email: $("#email").val().trim(),
-		            created_timestamp: now;
-		        };
+		            created_timestamp: now
+		        });
 
 		    var currentURL = window.location.origin;
 
-		    $.post(currentURL + "/api/new", newCharacter)
+		    $.post(currentURL + "/api/new", newUser)
 		        .done(function(data) {
 		            console.log(data);
-		            alert("Adding character...")
-		        })
+		            alert("Adding character...");
+		        });
 
 		    $('#name').val("");
 		    $('#role').val("");

@@ -19,9 +19,9 @@ var User = sequelize.define("User", {
 },
 {
     timestamps: false
-})
+});
 
 // Sync with DB
-User.sync()
+User.sync();
 
 module.exports = User;

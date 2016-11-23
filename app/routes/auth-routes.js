@@ -8,6 +8,8 @@ var mongoose = require('mongoose'),
 var Schema = mongoose.Schema,
 var passportEmail = require('passport-email');
 var emailUser = new Schema({});
+// requires the model with Passport-Email plugged in
+var User = require('./models/user');
 
 
 
@@ -88,8 +90,17 @@ app.get('/dashboard', ensureAuthenticated, function(req, res) {
 
 };
 
-//Passport email login
-//Passport email login
+///////////////////////////////
+//Passport email login code///
+/////////////////////////////
+
 User.plugin(passportEmail);
 
 module.exports = mongoose.model('emailUser', emailUser);
+
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(emailUser.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(emailUser.serializeUser());
+passport.deserializeUser(emailUser.deserializeUser());

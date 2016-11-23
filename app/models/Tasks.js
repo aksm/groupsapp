@@ -19,6 +19,6 @@ var Task = sequelize.define("Task", {
 });
 
 // Sync with DB
-Task.sync()
+Task.sync();
 
 module.exports = Task;
