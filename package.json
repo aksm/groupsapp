@@ -34,8 +34,7 @@
     "passport-facebook": "^2.1.1",
     "passport-google-oauth2": "^0.1.6",
     "sequelize": "^3.27.0",
-    "twilio": "^2.11.0",
-    "passport-email": "^3.10.9"
+    "twilio": "^2.11.0"
   },
   "devDependencies": {},
   "keywords": []
