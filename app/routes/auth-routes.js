@@ -4,6 +4,10 @@ var exphbs = require('express-handlebars');
 var passport = require('passport');
 var Strategy = require('passport-facebook').Strategy;
 var path = require('path');
+var mongoose = require('mongoose'),
+var Schema = mongoose.Schema,
+var passportEmail = require('passport-email');
+var emailUser = new Schema({});
 
 
 
@@ -23,22 +27,22 @@ app.get('/', function(req, res) {
 });
 
 app.get('/login', function(req, res) {
-  res.redirect('/');
+		res.redirect('/');
 });
 // Passport / Facebook Authentication Information
 passport.use(new Strategy({
-  clientID: process.env.FB_CLIENT_ID || '1826103597601691',
-  clientSecret: process.env.FB_CLIENT_SECRET || '1c5d8736244d4ecadc89fe7c0384eff0',
-  // callbackURL: 'http://localhost:3000/login/facebook/return'
-  callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
+		clientID: process.env.FB_CLIENT_ID || '1826103597601691',
+		clientSecret: process.env.FB_CLIENT_SECRET || '1c5d8736244d4ecadc89fe7c0384eff0',
+		// callbackURL: 'http://localhost:3000/login/facebook/return'
+		callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 },
-  function(accessToken, refreshToken, profile, cb) {
-    // In this example, the user's Facebook profile is supplied as the user
-    // record.  In a production-quality application, the Facebook profile should
-    // be associated with a user record in the application's database, which
-    // allows for account linking and authentication with other identity
-    // providers.
-    return cb(null, profile);
+		function(accessToken, refreshToken, profile, cb) {
+				// In this example, the user's Facebook profile is supplied as the user
+				// record.  In a production-quality application, the Facebook profile should
+				// be associated with a user record in the application's database, which
+				// allows for account linking and authentication with other identity
+				// providers.
+				return cb(null, profile);
 }));
 
 
@@ -47,11 +51,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user);
+		cb(null, user);
 });
 
 passport.deserializeUser(function(obj, cb) {
-  cb(null, obj);
+		cb(null, obj);
 });
 
 // Initiate the Facebook Authentication
@@ -59,18 +63,18 @@ app.get('/login/facebook', passport.authenticate('facebook'));
 
 // When Facebook is done, it uses the below route to determine where to go
 app.get('/login/facebook/return',
-  passport.authenticate('facebook', { failureRedirect: '/' }),
+		passport.authenticate('facebook', { failureRedirect: '/' }),
 
-  function(req, res) {
-    res.redirect('/dashboard');
-  });
+		function(req, res) {
+				res.redirect('/dashboard');
+		});
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    // req.user is available for use here
-    return next(); }
+		if (req.isAuthenticated()) {
+				// req.user is available for use here
+				return next(); }
 
-  // denied. redirect to login
-  res.redirect('/');
+		// denied. redirect to login
+		res.redirect('/');
 }
 
 app.get('/dashboard', ensureAuthenticated, function(req, res) {
@@ -83,3 +87,9 @@ app.get('/dashboard', ensureAuthenticated, function(req, res) {
 // });
 
 };
+
+//Passport email login
+//Passport email login
+User.plugin(passportEmail);
+
+module.exports = mongoose.model('emailUser', emailUser);

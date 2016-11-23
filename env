@@ -1,0 +1,6 @@
+PORT=3000
+JAWSDB_URL=mysql://acc78qfy3qdaja8c:cncto0r2ip98tbqc@enqhzd10cxh7hv2e.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/i02ltijtn37qpgkp
+FB_CLIENT_ID=330263307359714
+FB_CLIENT_SECRET=95e37dae65339e49e839f145a5e1c21e
+G_CLIENT_ID=259963063552-ff470tmtqmlomcmroh85v95jt11phh7s.apps.googleusercontent.com
+G_CLIENT_SECRET=IkNCECl85qKPAxlPvjLKbDtl
