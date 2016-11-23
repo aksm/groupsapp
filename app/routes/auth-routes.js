@@ -89,29 +89,29 @@ module.exports = function(app) {
 ///////////////////////////////////////
 ///Passport username authentication///
 /////////////////////////////////////
-passport.use(new LocalStrategy(
-    function(username, password, done) {
-        User.findOne({ username: username }, function(err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
-            }
-            if (!user.validPassword(password)) {
-                return done(null, false, { message: 'Incorrect password.' });
-            }
-            return done(null, user);
-        });
-    }
-));
+// passport.use(new LocalStrategy(
+//     function(username, password, done) {
+//         User.findOne({ username: username }, function(err, user) {
+//             if (err) {
+//                 return done(err);
+//             }
+//             if (!user) {
+//                 return done(null, false, { message: 'Incorrect username.' });
+//             }
+//             if (!user.validPassword(password)) {
+//                 return done(null, false, { message: 'Incorrect password.' });
+//             }
+//             return done(null, user);
+//         });
+//     }
+// ));
 
 /////////////////////////////////
 ///Logout///////////////////////
 ///////////////////////////////
-$("#logout").on('click', function() {
+// document.getElementById("logout").addEventListener("click", function() {
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
     });
-});
+// });
