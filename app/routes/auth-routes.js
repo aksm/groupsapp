@@ -7,6 +7,8 @@ var googleStrategy = require('passport-google-oauth2').Strategy;
 var Strategy = require('passport-facebook').Strategy;
 var LocalStrategy = require('passport-local');
 var path = require('path');
+var session = require('express-session');
+var memoryStore = require('session-memory-store')(session);
 var User = require('../models/Users.js');
 // monkeypatch because passport uses the google plus API which isn't available for google apps for enterprise.
 // googleStrategy.prototype.userProfile = function(token, done) {
@@ -20,7 +22,7 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser').urlencoded({ extended: true }));
 // app.use(require('cookie-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 60000} }));
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, store: new memoryStore() }));
 
     app.set('views', path.join(__dirname, '../../views'));
     app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -59,7 +61,7 @@ passport.use(new googleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    	console.log(profile);
+    	// console.log(profile);
       return done(null, profile);
     // });
   }
