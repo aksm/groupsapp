@@ -1,7 +1,7 @@
 var Event = require("../models/Events.js");
 var Organization = require("../models/Organizations.js");
 var Task = require("../models/Tasks.js");
-var User = require("../models/Users.js");
+var sqlUser = require("../models/Users.js");
 
 module.exports = function(app) {
 
@@ -87,7 +87,7 @@ module.exports = function(app) {
         console.log("Users say hello");
 
         if (req.params.user_id) {
-            User.findAll({
+            sqlUser.findAll({
                 where: {
                     user_id: req.params.user_id
                 }
@@ -97,7 +97,7 @@ module.exports = function(app) {
         } else {
 
             // Run a quick test to confirm.
-            User.findAll({})
+            sqlUser.findAll({})
                 .then(function(result) {
                     res.json(result);
                 });
