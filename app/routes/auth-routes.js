@@ -8,12 +8,6 @@ var Strategy = require('passport-facebook').Strategy;
 var LocalStrategy = require('passport-local');
 var path = require('path');
 var User = require('../models/Users.js');
-// var session = require('express-session');
-// app.use(session({
-// 	secret: 'tacocat',
-// 	resave: true,
-// 	saveUninitialized: true
-// }));
 // monkeypatch because passport uses the google plus API which isn't available for google apps for enterprise.
 // googleStrategy.prototype.userProfile = function(token, done) {
 //   done(null, {});
@@ -42,8 +36,8 @@ app.get('/login', function(req, res) {
 passport.use(new fbStrategy({
   clientID: process.env.FB_CLIENT_ID,
   clientSecret: process.env.FB_CLIENT_SECRET,
-  callbackURL: 'http://localhost:3000/login/facebook/return'
-  // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
+  // callbackURL: 'http://localhost:3000/login/facebook/return'
+  callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 },
   function(accessToken, refreshToken, profile, cb) {
     // In this example, the user's Facebook profile is supplied as the user
@@ -59,8 +53,8 @@ passport.use(new fbStrategy({
 passport.use(new googleStrategy({
     clientID: process.env.G_CLIENT_ID,
     clientSecret: process.env.G_CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/login/google/return',
-	// callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
+    // callbackURL: 'http://localhost:3000/login/google/return',
+	callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
@@ -162,3 +156,4 @@ app.get('/dashboard', ensureAuthenticated, function(req, res) {
         res.redirect('/');
     });
 // });
+};

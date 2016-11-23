@@ -8,8 +8,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // Comment out for deployment
-var dotenv = require('dotenv');
-dotenv.load();
+// var dotenv = require('dotenv');
+// dotenv.load();
 
 // Sets up the Express App
 // =============================================================
