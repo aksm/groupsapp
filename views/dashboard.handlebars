@@ -43,6 +43,8 @@
     </div>
     <div id="select-group" class="modal">
       <div class="modal-content">
+      {{#if userstatus}}
+      {{else}}
           {{!-- Button to create group --}}
           <div class="row center-align">
               <a class="btn waves-effect waves-light green accent-4 white-text group-action" id="group-add">Create a Group</a>
@@ -78,7 +80,7 @@
             <button class="btn waves-effect waves-light green accent-4" type="submit" name="action">Join Group
             </button>
           </form>
-
+      {{/if}}
     </div>
 
   </section>

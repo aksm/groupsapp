@@ -42,25 +42,8 @@ module.exports = function(app) {
 	    // be associated with a user record in the application's database, which
 	    // allows for account linking and authentication with other identity
 	    // providers.
-	   //  User.findOrCreate({where: {facebook_id : profile.id }})
-		  // .spread(function(user, created) {
-		  //   console.log(user.get({
-		  //     plain: true
-		  //   }));
-		  //   console.log(created);
 
-    /*
-      {
-        username: 'sdepold',
-        job: 'Technical Lead JavaScript',
-        id: 1,
-        createdAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET),
-        updatedAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET)
-      }
-      created: true
-    */
-    return cb(null, profile);
-	    // });
+	    return cb(null, profile);
 	}));
 
 	// Use the GoogleStrategy within Passport.
@@ -72,10 +55,7 @@ module.exports = function(app) {
 	    passReqToCallback   : true
 	  },
 	  function(request, accessToken, refreshToken, profile, done) {
-	    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-	    	// console.log(profile);
 	      return done(null, profile);
-	    // });
 	  }
 	));
 
@@ -133,7 +113,18 @@ module.exports = function(app) {
 	}
 
 	app.get('/dashboard', ensureAuthenticated, function(req, res) {
-		res.render('dashboard');
+		var id = req.user.id;
+		var provider = req.user.provider;
+		var options = {};
+		options[provider+'_id'] = id;
+	    User.findOrCreate({where: options})
+		  .spread(function(user, created) {
+		    console.log(user.get({
+		      plain: true
+		    }));
+		    console.log(created);
+		res.render('dashboard', {'userstatus': created});
+		});
 	});
 
 	///////////////////////////////////////

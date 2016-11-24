@@ -17,15 +17,6 @@ function show(element) {
     $('.parallax').parallax();
     $('.modal').modal();
 
-    // index code
-    // $('.login-row>a').on('click', function() {
-    // 	var route = $(this).data('route');
-    // 	$.get(route).
-    // 	done(function(data) {
-    // 		console.log(data);
-    // 	});
-    // });
-
     // dashboard code
     $('#select-group').modal({dismissible: false});
     $('#select-group').modal('open');
