@@ -13,13 +13,15 @@ function show(element) {
 (function($){
   $(function(){
 
+  	// Initialize typed.js animation.
     $('.button-collapse').sideNav();
     $('.parallax').parallax();
     $('.modal').modal();
     $('#typer').typed({
-    	strings: ["Together.", "Motivated.", "Organized."],
-    	typeSpeed: 0
+    	strings: ["Motivated.", "Together.", "Organized."],
+    	typeSpeed: 50
     });
+
     // dashboard code
     $('#select-group').modal({dismissible: false});
     $('#select-group').modal('open');

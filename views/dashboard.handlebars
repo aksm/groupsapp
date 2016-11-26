@@ -41,10 +41,45 @@
       </div>
 
     </div>
+    {{#if groupsZero}}
     <div id="select-group" class="modal">
       <div class="modal-content">
-      {{#if userstatus}}
-      {{else}}
+      {{#if notRegistered}}
+          {{!-- Registration form --}}
+          <form method="POST" class="col s12 center-align register" id="registration-form" action="/register?_method=POST">
+            <input type="hidden" name="userID" value="{{userID}}">
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix green-text text-accent-4">person</i>
+                <input name="username" id="username" value="{{name}}" type="text" class="validate" required="required">
+                <label for="username">Username</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12 m6">
+{{!--                 <i class="material-icons prefix green-text text-accent-4">person</i> --}}
+                <input name="firstName" id="first-name" value="{{fName}}" type="text" class="validate" required="required">
+                <label for="first-name">First Name</label>
+              </div>
+              <div class="input-field col s12 m6">
+{{!--                 <i class="material-icons prefix green-text text-accent-4">person</i> --}}
+                <input name="lastName" id="last-name" value="{{lName}}" type="text" class="validate" required="required">
+                <label for="last-name">Last Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                <i class="material-icons prefix green-text text-accent-4">email</i>
+                <input name="email" id="email" value="{{email}}" type="email" class="validate" required="required">
+                <label for="username">E-mail</label>
+              </div>
+            </div>
+            <button class="btn waves-effect waves-light green accent-4" type="submit" name="action">Register
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+      {{/if}}
+          <div class="container {{display}}">
           {{!-- Button to create group --}}
           <div class="row center-align">
               <a class="btn waves-effect waves-light green accent-4 white-text group-action" id="group-add">Create a Group</a>
@@ -80,7 +115,8 @@
             <button class="btn waves-effect waves-light green accent-4" type="submit" name="action">Join Group
             </button>
           </form>
-      {{/if}}
-    </div>
+          </div>
 
+    </div>
+    {{/if}}
   </section>

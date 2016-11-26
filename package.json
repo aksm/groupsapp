@@ -28,7 +28,7 @@
     "express-session": "^1.14.2",
     "handlebars": "^4.0.6",
     "materialize-css": "^0.97.8",
-    "method-override": "^2.3.6",
+    "method-override": "^2.3.7",
     "morgan": "^1.7.0",
     "mysql": "^2.12.0",
     "passport": "^0.3.2",

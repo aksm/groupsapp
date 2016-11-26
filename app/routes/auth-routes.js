@@ -9,10 +9,18 @@ var LocalStrategy = require('passport-local');
 var path = require('path');
 var session = require('express-session');
 var memoryStore = require('session-memory-store')(session);
+var methodOverride = require('method-override');
+var bodyParser = require('body-parser');
 var User = require('../models/Users.js');
 
-module.exports = function(app) {
+// Use this to validate what Passport returns from each strategy
+function undefinedCheck(value) {
+	return value === undefined ? '' : value;
+}
 
+module.exports = function(app) {
+	app.use(bodyParser.urlencoded());
+	app.use(methodOverride('_method'));
 	// Incorporated a variety of Express packages.
 	app.use(require('morgan')('combined'));
 	app.use(require('cookie-parser')());
@@ -113,20 +121,59 @@ module.exports = function(app) {
 	}
 
 	app.get('/dashboard', ensureAuthenticated, function(req, res) {
+		// console.log(req.user);
+		var userName = undefinedCheck(req.user.displayName);
 		var id = req.user.id;
+		var email = undefinedCheck(req.user.emails) === '' ? '' : req.user.emails[0].value;
+		// var email = req.user.emails !== undefined ? req.user.emails[0].value: '';
+		var firstName = undefinedCheck(req.user.name.givenName);
+		var lastName = undefinedCheck(req.user.name.familyName);
+		// console.log(firstName, lastName);
+		// console.log(email);
 		var provider = req.user.provider;
 		var options = {};
 		options[provider+'_id'] = id;
 	    User.findOrCreate({where: options})
 		  .spread(function(user, created) {
-		    console.log(user.get({
-		      plain: true
-		    }));
-		    console.log(created);
-		res.render('dashboard', {'userstatus': created});
+		    var groupStatus = user.get({plain: true}).groups === 0;
+		    var notRegistered = !user.get({plain: true}).registered;
+		    var grootsID = user.get({plain: true}).user_id;
+		    var showHide = !notRegistered && groupStatus ? "show": "hide";
+			res.render('dashboard', {
+				'notRegistered': notRegistered,
+				'groupsZero': groupStatus,
+				'display': showHide,
+				'email': email,
+				'name': userName,
+				'fName': firstName,
+				'lName': lastName,
+				'userID': grootsID
+			});
 		});
 	});
 
+	app.post('/register', ensureAuthenticated, function(req, res) {
+		console.log(req.body);
+		User.update(
+			{
+				user_name: req.body.username,
+				registered: true,
+				f_name: req.body.firstName,
+				l_name: req.body.lastName,
+				email: req.body.email
+			},
+			{
+				where: {user_id: req.body.userID}
+			})
+			.then(function(result) {
+				res.render('dashboard',{
+					'notRegistered': false,
+					'groupsZero': true
+				});
+			}, function(rejectedPromiseError) {
+
+			});
+	});
 	///////////////////////////////////////
 	///Passport username authentication///
 	/////////////////////////////////////

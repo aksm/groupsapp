@@ -11,6 +11,16 @@ var sqlUser = sequelize.define("User", {
     primaryKey: true
   },
   user_name: Sequelize.STRING,
+  registered: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false
+  },
+  groups: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
+    allowNull: false
+  },
   facebook_id: Sequelize.STRING,
   google_id: Sequelize.STRING,
   twitter_id: Sequelize.STRING,
