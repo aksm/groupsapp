@@ -75,7 +75,8 @@ module.exports = function(app) {
 	//    clientSecret: process.env.T_CLIENT_SECRET,
 	    consumerKey: process.env.T_CLIENT_ID,
 	    consumerSecret: process.env.T_CLIENT_SECRET,
-	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	    callbackURL: 'http://localhost:3000/login/twitter/return',
+	    // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/twitter/return'
 	  },
 	   function(request, accessToken, refreshToken, profile, done) {
 	      return done(null, profile);
@@ -88,7 +89,8 @@ module.exports = function(app) {
 	//    clientSecret: process.env.T_CLIENT_SECRET,
 	    consumerKey: process.env.L_CLIENT_ID,
 	    consumerSecret: process.env.L_CLIENT_SECRET,
-	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	    callbackURL: 'http://localhost:3000/login/linkedin/return',
+	    // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
 	  },
 	   function(request, accessToken, refreshToken, profile, done) {
 	      return done(null, profile);
@@ -144,10 +146,7 @@ module.exports = function(app) {
 	//   request.  The first step in Twitter authentication will involve redirecting
 	//   the user to twitter.com.  After authenticating, Google will redirect the
 	//   user back to this application at /auth/twitter/return
-	app.get('/login/twitter', passport.authenticate('google', { scope: 
-	  	[ 'https://www.googleapis.com/auth/plus.login',
-	  	'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
-	));
+	app.get('/login/twitter', passport.authenticate('twitter'));
 
 	// GET /auth/twitter/return
 	//   Use passport.authenticate() as route middleware to authenticate the
@@ -166,10 +165,7 @@ module.exports = function(app) {
 	//   request.  The first step in Linkedin authentication will involve redirecting
 	//   the user to twitter.com.  After authenticating, Google will redirect the
 	//   user back to this application at /auth/twitter/return
-	app.get('/login/linkedin', passport.authenticate('google', { scope: 
-	  	[ 'https://www.googleapis.com/auth/plus.login',
-	  	'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
-	));
+	app.get('/login/linkedin', passport.authenticate('linkedin'));
 
 	// GET /auth/linkedin/return
 	//   Use passport.authenticate() as route middleware to authenticate the
@@ -196,8 +192,8 @@ module.exports = function(app) {
 		var userName = undefinedCheck(req.user.displayName);
 		var id = req.user.id;
 		var email = undefinedCheck(req.user.emails) === '' ? '' : req.user.emails[0].value;
-		var firstName = undefinedCheck(req.user.name.givenName);
-		var lastName = undefinedCheck(req.user.name.familyName);
+		var firstName = undefinedCheck(req.user.name) === '' ? '' : req.user.name.givenName;
+		var lastName = undefinedCheck(req.user.name) === '' ? '' : req.user.name.familyName;
 		var provider = req.user.provider;
 		var options = {};
 		options[provider+'_id'] = id;
@@ -236,10 +232,6 @@ module.exports = function(app) {
 			})
 			.then(function(result) {
 				res.redirect('/dashboard');
-				// res.render('dashboard',{
-				// 	'notRegistered': false,
-				// 	'groupsZero': true
-				// });
 			}, function(rejectedPromiseError) {
 
 			});
