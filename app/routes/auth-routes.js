@@ -43,8 +43,8 @@ module.exports = function(app) {
 	passport.use(new fbStrategy({
 	  clientID: process.env.FB_CLIENT_ID,
 	  clientSecret: process.env.FB_CLIENT_SECRET,
-	  callbackURL: 'http://localhost:3000/login/facebook/return'
-	  // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
+	  // callbackURL: 'http://localhost:3000/login/facebook/return'
+	  callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 	},
 	  function(accessToken, refreshToken, profile, cb) {
 	    // In this example, the user's Facebook profile is supplied as the user
@@ -60,8 +60,8 @@ module.exports = function(app) {
 	passport.use(new googleStrategy({
 	    clientID: process.env.G_CLIENT_ID,
 	    clientSecret: process.env.G_CLIENT_SECRET,
-	    callbackURL: 'http://localhost:3000/login/google/return',
-		// callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
+	    // callbackURL: 'http://localhost:3000/login/google/return',
+		callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
 	    passReqToCallback   : true
 	  },
 	  function(request, accessToken, refreshToken, profile, done) {
@@ -75,22 +75,22 @@ module.exports = function(app) {
 	//    clientSecret: process.env.T_CLIENT_SECRET,
 	    consumerKey: process.env.T_CLIENT_ID,
 	    consumerSecret: process.env.T_CLIENT_SECRET,
-	    callbackURL: 'http://localhost:3000/login/twitter/return',
-	    // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/twitter/return'
+	    // callbackURL: 'http://localhost:3000/login/twitter/return',
+	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/twitter/return',
 	  },
 	   function(request, accessToken, refreshToken, profile, done) {
 	      return done(null, profile);
 	}
 ));
 
-	// Use the TwitterStrategy within Passport.
+	// Use the linkedinStrategy within Passport.
 	passport.use(new linkedinStrategy({
 	//	clientID: process.env.T_CLIENT_ID,
 	//    clientSecret: process.env.T_CLIENT_SECRET,
 	    consumerKey: process.env.L_CLIENT_ID,
 	    consumerSecret: process.env.L_CLIENT_SECRET,
-	    callbackURL: 'http://localhost:3000/login/linkedin/return',
-	    // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	    // callbackURL: 'http://localhost:3000/login/linkedin/return',
+	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
 	  },
 	   function(request, accessToken, refreshToken, profile, done) {
 	      return done(null, profile);
