@@ -12,6 +12,7 @@ var memoryStore = require('session-memory-store')(session);
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 var User = require('../models/Users.js');
+var Organization = require('../models/Organizations.js');
 
 // Use this to validate what Passport returns from each strategy
 function undefinedCheck(value) {
@@ -19,7 +20,6 @@ function undefinedCheck(value) {
 }
 
 module.exports = function(app) {
-	app.use(bodyParser.urlencoded());
 	app.use(methodOverride('_method'));
 	// Incorporated a variety of Express packages.
 	app.use(require('morgan')('combined'));
@@ -121,15 +121,11 @@ module.exports = function(app) {
 	}
 
 	app.get('/dashboard', ensureAuthenticated, function(req, res) {
-		// console.log(req.user);
 		var userName = undefinedCheck(req.user.displayName);
 		var id = req.user.id;
 		var email = undefinedCheck(req.user.emails) === '' ? '' : req.user.emails[0].value;
-		// var email = req.user.emails !== undefined ? req.user.emails[0].value: '';
 		var firstName = undefinedCheck(req.user.name.givenName);
 		var lastName = undefinedCheck(req.user.name.familyName);
-		// console.log(firstName, lastName);
-		// console.log(email);
 		var provider = req.user.provider;
 		var options = {};
 		options[provider+'_id'] = id;
@@ -147,13 +143,14 @@ module.exports = function(app) {
 				'name': userName,
 				'fName': firstName,
 				'lName': lastName,
-				'userID': grootsID
+				'userID': grootsID,
+				'groupName': 'Group Name'
 			});
 		});
 	});
 
+	// Route to register users in database.
 	app.post('/register', ensureAuthenticated, function(req, res) {
-		console.log(req.body);
 		User.update(
 			{
 				user_name: req.body.username,
@@ -166,14 +163,66 @@ module.exports = function(app) {
 				where: {user_id: req.body.userID}
 			})
 			.then(function(result) {
-				res.render('dashboard',{
-					'notRegistered': false,
-					'groupsZero': true
-				});
+				res.redirect('/dashboard');
+				// res.render('dashboard',{
+				// 	'notRegistered': false,
+				// 	'groupsZero': true
+				// });
 			}, function(rejectedPromiseError) {
 
 			});
 	});
+
+	app.post('/group/:action?', ensureAuthenticated, function(req, res) {
+		// console.log(req);
+		console.log(req.body);
+		console.log(req.params);
+		switch(req.params.action) {
+			case 'add':
+			    Organization.findOrCreate({
+			    	where: {org_name: req.body.groupName},
+			    	defaults: {admin_id: req.body.userID}
+			    })
+				  .spread(function(user, created) {
+				  	console.log(user);
+				  	switch(created) {
+				  		case true:
+							User.update(
+								{
+									groups: User.sequelize.literal('groups +1')
+								},
+								{
+									where: {user_id: req.body.userID}
+								})
+								.then(function(result) {
+								// 	result.updateAttributes(
+								// {
+								// 	default_group: req.body.groupName
+								// },
+								// {
+								// 	where: {groups: user.get({plain: true}).org_id}
+								// });
+									console.log(result);
+								}, function(rejectedPromiseError) {
+									console.log(rejectedPromiseError);
+								});
+				  		break;
+				  		case false:
+				  		break;
+				  		default:
+				  			console.log('WTF happened?');
+				  	}
+					res.redirect('/dashboard');
+
+					});
+			break;
+			case 'join':
+			break;
+			default:
+				console.log('Oopsy. What happened?');
+		}
+	});
+
 	///////////////////////////////////////
 	///Passport username authentication///
 	/////////////////////////////////////
@@ -203,4 +252,5 @@ module.exports = function(app) {
         res.redirect('/');
     });
 // });
+
 };

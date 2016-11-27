@@ -21,6 +21,7 @@ var sqlUser = sequelize.define("User", {
     defaultValue: 0,
     allowNull: false
   },
+  default_group: Sequelize.INTEGER,
   facebook_id: Sequelize.STRING,
   google_id: Sequelize.STRING,
   twitter_id: Sequelize.STRING,

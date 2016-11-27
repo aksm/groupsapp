@@ -1,6 +1,6 @@
   <nav class="white" role="navigation">
     <div class="nav-wrapper">
-      <a id="group-name" href="#" class="brand-logo center">Group Name</a>
+      <a id="group-name" href="#" class="brand-logo center">{{groupName}}</a>
       <a id="logo-container" href="#" class="brand-logo right"><img src="assets/images/logo.png" class="responsive-img" id="logo"></a>
 
       <ul id="nav-mobile" class="side-nav">
@@ -28,6 +28,7 @@
         <div class=card>
           <div class="card-content">
             <span class="card-title">Events</span>
+            <div id="calendar" class="container"></div>
           </div>
         </div>
       </div>
@@ -86,11 +87,12 @@
           </div>
 
           {{!-- Form to create group --}}
-          <form class="col s12 hide center-align group-post" id="group-add-form" data-route="/org/add">
+          <form method="POST" class="col s12 hide center-align group-post" id="group-add-form" action="/group/add?_method=POST">
+            <input type="hidden" name="userID" value="{{userID}}">
             <div class="row">
               <div class="input-field col s12">
                 <i class="material-icons prefix green-text text-accent-4" id="group-add-icon">group</i>
-                <input id="group-name" type="text" class="validate" required="required">
+                <input id="group-name" name="groupName" type="text" class="validate" required="required">
                 <label for="group-name">Group Name</label>
               </div>
             </div>
@@ -104,11 +106,12 @@
           </div>
 
           {{!-- Form to join group --}}
-          <form class="col s12 hide center-align group-post" id="group-join-form" data-route="/org/join">
+          <form method="POST" class="col s12 hide center-align group-post" id="group-join-form" action="/group/join?_method=POST">
+            <input type="hidden" name="userID" value="{{userID}}">
             <div class="row">
               <div class="input-field col s12">
                 <i class="material-icons prefix green-text text-accent-4">group</i>
-                <input id="group-id" type="text" class="validate" required="required">
+                <input id="group-id" name="groupID" type="text" class="validate" required="required">
                 <label for="group-id">Group ID (Contact Administrator for ID)</label>
               </div>
             </div>
