@@ -71,8 +71,6 @@ module.exports = function(app) {
 
 	// Use the TwitterStrategy within Passport.
 	passport.use(new twitterStrategy({
-	//	clientID: process.env.T_CLIENT_ID,
-	//    clientSecret: process.env.T_CLIENT_SECRET,
 	    consumerKey: process.env.T_CLIENT_ID,
 	    consumerSecret: process.env.T_CLIENT_SECRET,
 	    // callbackURL: 'http://localhost:3000/login/twitter/return',
@@ -85,8 +83,6 @@ module.exports = function(app) {
 
 	// Use the linkedinStrategy within Passport.
 	passport.use(new linkedinStrategy({
-	//	clientID: process.env.T_CLIENT_ID,
-	//    clientSecret: process.env.T_CLIENT_SECRET,
 	    consumerKey: process.env.L_CLIENT_ID,
 	    consumerSecret: process.env.L_CLIENT_SECRET,
 	    // callbackURL: 'http://localhost:3000/login/linkedin/return',
@@ -156,7 +152,6 @@ module.exports = function(app) {
 	app.get('/login/twitter/return', 
 	  passport.authenticate('twitter', { failureRedirect: '/' }),
 	  function(req, res) {
-	    console.log(res);
 	    res.redirect('/dashboard');
 	  });
 
@@ -175,7 +170,6 @@ module.exports = function(app) {
 	app.get('/login/linkedin/return', 
 	  passport.authenticate('linkedin', { failureRedirect: '/' }),
 	  function(req, res) {
-	    console.log(res);
 	    res.redirect('/dashboard');
 	  });
 
