@@ -8,8 +8,13 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // Comment out for deployment
+<<<<<<< HEAD
+var dotenv = require('dotenv');
+dotenv.load();
+=======
 //var dotenv = require('dotenv');
 //dotenv.load();
+>>>>>>> refs/remotes/origin/master
 
 // Sets up the Express App
 // =============================================================
