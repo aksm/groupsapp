@@ -41,8 +41,8 @@ module.exports = function(app) {
 	passport.use(new fbStrategy({
 	  clientID: process.env.FB_CLIENT_ID,
 	  clientSecret: process.env.FB_CLIENT_SECRET,
-	  // callbackURL: 'http://localhost:3000/login/facebook/return'
-	  callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
+	  callbackURL: 'http://localhost:3000/login/facebook/return'
+	  // callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/facebook/return'
 	},
 	  function(accessToken, refreshToken, profile, cb) {
 	    // In this example, the user's Facebook profile is supplied as the user
@@ -58,8 +58,8 @@ module.exports = function(app) {
 	passport.use(new googleStrategy({
 	    clientID: process.env.G_CLIENT_ID,
 	    clientSecret: process.env.G_CLIENT_SECRET,
-	    // callbackURL: 'http://localhost:3000/login/google/return',
-		callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
+	    callbackURL: 'http://localhost:3000/login/google/return',
+		// callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return',
 	    passReqToCallback   : true
 	  },
 	  function(request, accessToken, refreshToken, profile, done) {
