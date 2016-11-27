@@ -3,6 +3,8 @@ var app = express();
 var exphbs = require('express-handlebars');
 var passport = require('passport');
 var fbStrategy = require('passport-facebook').Strategy;
+var twitterStrategy = require('passport-twitter').Strategy;
+var linkedinStrategy = require('passport-linkedin').Strategy;
 var googleStrategy = require('passport-google-oauth2').Strategy;
 var Strategy = require('passport-facebook').Strategy;
 var LocalStrategy = require('passport-local');
@@ -67,6 +69,32 @@ module.exports = function(app) {
 	  }
 	));
 
+	// Use the TwitterStrategy within Passport.
+	passport.use(new twitterStrategy({
+	//	clientID: process.env.T_CLIENT_ID,
+	//    clientSecret: process.env.T_CLIENT_SECRET,
+	    consumerKey: process.env.T_CLIENT_ID,
+	    consumerSecret: process.env.T_CLIENT_SECRET,
+	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	  },
+	   function(request, accessToken, refreshToken, profile, done) {
+	      return done(null, profile);
+	}
+));
+
+	// Use the TwitterStrategy within Passport.
+	passport.use(new linkedinStrategy({
+	//	clientID: process.env.T_CLIENT_ID,
+	//    clientSecret: process.env.T_CLIENT_SECRET,
+	    consumerKey: process.env.L_CLIENT_ID,
+	    consumerSecret: process.env.L_CLIENT_SECRET,
+	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	  },
+	   function(request, accessToken, refreshToken, profile, done) {
+	      return done(null, profile);
+	}
+));
+
     // Here we start our Passport process and initiate the storage of sessions (i.e. closing browser maintains user)
     app.use(passport.initialize());
     app.use(passport.session());
@@ -108,6 +136,50 @@ module.exports = function(app) {
 	app.get('/login/google/return', 
 	  passport.authenticate('google', { failureRedirect: '/' }),
 	  function(req, res) {
+	    res.redirect('/dashboard');
+	  });
+
+	// GET /auth/twitter
+	//   Use passport.authenticate() as route middleware to authenticate the
+	//   request.  The first step in Twitter authentication will involve redirecting
+	//   the user to twitter.com.  After authenticating, Google will redirect the
+	//   user back to this application at /auth/twitter/return
+	app.get('/login/twitter', passport.authenticate('google', { scope: 
+	  	[ 'https://www.googleapis.com/auth/plus.login',
+	  	'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
+	));
+
+	// GET /auth/twitter/return
+	//   Use passport.authenticate() as route middleware to authenticate the
+	//   request.  If authentication fails, the user will be redirected back to the
+	//   login page.  Otherwise, the primary route function function will be called,
+	//   which, in this example, will redirect the user to the home page.
+	app.get('/login/twitter/return', 
+	  passport.authenticate('twitter', { failureRedirect: '/' }),
+	  function(req, res) {
+	    console.log(res);
+	    res.redirect('/dashboard');
+	  });
+
+	// GET /auth/linkedin
+	//   Use passport.authenticate() as route middleware to authenticate the
+	//   request.  The first step in Linkedin authentication will involve redirecting
+	//   the user to twitter.com.  After authenticating, Google will redirect the
+	//   user back to this application at /auth/twitter/return
+	app.get('/login/linkedin', passport.authenticate('google', { scope: 
+	  	[ 'https://www.googleapis.com/auth/plus.login',
+	  	'https://www.googleapis.com/auth/plus.profile.emails.read' ] }
+	));
+
+	// GET /auth/linkedin/return
+	//   Use passport.authenticate() as route middleware to authenticate the
+	//   request.  If authentication fails, the user will be redirected back to the
+	//   login page.  Otherwise, the primary route function function will be called,
+	//   which, in this example, will redirect the user to the home page.
+	app.get('/login/linkedin/return', 
+	  passport.authenticate('linkedin', { failureRedirect: '/' }),
+	  function(req, res) {
+	    console.log(res);
 	    res.redirect('/dashboard');
 	  });
 
