@@ -269,7 +269,7 @@ module.exports = function(app) {
 	///Logout///////////////////////
 	///////////////////////////////
 	// document.getElementById("logout").addEventListener("click", function() {
-    app.get('/logout', function(req, res) {
+    app.get('/logout', ensureAuthenticated, function(req, res) {
         req.logout();
         res.redirect('/');
     });
