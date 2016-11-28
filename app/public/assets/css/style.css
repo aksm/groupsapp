@@ -139,3 +139,10 @@ footer.page-footer {
   /* this is needed so Safari keeps sharp edges */
   transform: scale(1);
 }
+
+.ui-state-hover {
+  background: #795548;   
+}
+.ui-state-active {
+  background: #00c853;   
+}
