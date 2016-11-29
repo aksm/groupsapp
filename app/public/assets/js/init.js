@@ -130,7 +130,7 @@ function show(element) {
 		]
 	});
 
-jQuery.fn.swap = function(b){ 
+$.fn.swap = function(b){ 
     // method from: http://blog.pengoworks.com/index.cfm/2008/9/24/A-quick-and-dirty-swap-method-for-jQuery
     b = jQuery(b)[0]; 
     var a = this[0]; 
@@ -142,12 +142,12 @@ jQuery.fn.swap = function(b){
 };
 
 
-$( ".dragdrop" ).draggable({ revert: true, helper: "clone" });
+$('.dragdrop').draggable({ revert: true, helper: 'clone' });
 
-$( ".dragdrop" ).droppable({
-    accept: ".dragdrop",
-    activeClass: "ui-state-hover",
-    hoverClass: "ui-state-active",
+$('.dragdrop').droppable({
+    accept: '.dragdrop',
+    activeClass: 'ui-state-hover',
+    hoverClass: 'ui-state-active',
     drop: function( event, ui ) {
 
         var draggable = ui.draggable, droppable = $(this),

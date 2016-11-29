@@ -10,7 +10,8 @@ var Event = sequelize.define("Event", {
     autoIncrement: true,
     primaryKey: true
   },
-  event_date: Sequelize.DATE,
+  event_start_date: Sequelize.DATE,
+  event_end_date: Sequelize.DATE,
   created_date: Sequelize.DATE,
   org_shortcode: Sequelize.STRING,
   event_name: Sequelize.STRING,

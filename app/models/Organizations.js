@@ -16,10 +16,6 @@ var Organization = sequelize.define("Organization", {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    members: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
     org_shortcode: Sequelize.STRING,
     fb_link: Sequelize.STRING,
     created_timestamp: {

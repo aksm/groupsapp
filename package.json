@@ -40,6 +40,7 @@
     "passport-twitter": "^1.0.4",
     "sequelize": "^3.27.0",
     "session-memory-store": "^0.2.2",
+    "shortid": "^2.2.6",
     "twilio": "^2.11.0"
   },
   "devDependencies": {},

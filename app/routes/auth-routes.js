@@ -15,6 +15,7 @@ var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 var User = require('../models/Users.js');
 var Organization = require('../models/Organizations.js');
+var shortid = require('shortid');
 
 // Use this to validate what Passport returns from each strategy
 function undefinedCheck(value) {
@@ -203,10 +204,15 @@ module.exports = function(app) {
 			case 'add':
 			    Organization.findOrCreate({
 			    	where: {org_name: req.body.groupName},
-			    	defaults: {admin_id: req.body.userID}
+			    	defaults: {
+			    		admin_id: req.body.userID,
+			    		org_shortcode: shortid.generate(),
+			    		member_count: 1
+			    	},
+
 			    })
-				  .spread(function(user, created) {
-				  	console.log(user);
+				  .spread(function(group, created) {
+				  	// console.log(user);
 				  	switch(created) {
 				  		case true:
 							User.update(
@@ -217,14 +223,17 @@ module.exports = function(app) {
 									where: {user_id: req.body.userID}
 								})
 								.then(function(result) {
-								// 	result.updateAttributes(
-								// {
-								// 	default_group: req.body.groupName
-								// },
-								// {
-								// 	where: {groups: user.get({plain: true}).org_id}
-								// });
-									console.log(result);
+									User.findOne({where: {user_id: req.body.userID}
+								}).then(function(user) {
+									// console.log(user);
+									// console.log(group);
+									user.updateAttributes({
+										default_group: group.dataValues.org_id
+									}).then(function(result) {
+										console.log(result);
+									});
+								});
+
 								}, function(rejectedPromiseError) {
 									console.log(rejectedPromiseError);
 								});
