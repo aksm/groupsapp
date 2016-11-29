@@ -163,9 +163,9 @@ module.exports = function(app) {
 		    var notRegistered = !user.get({plain: true}).registered;
 		    var grootsID = user.get({plain: true}).user_id;
 		    var showHide = !notRegistered && groupStatus ? "show": "hide";
-			Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
-				}).then(function(group) {
-		    var defaultGroup = group.get({plain: true}).org_name;
+			// Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
+			// 	}).then(function(group) {
+		 //    var defaultGroup = group.get({plain: true}).org_name;
 			res.render('dashboard', {
 				'notRegistered': notRegistered,
 				'groupsZero': groupStatus,
@@ -175,9 +175,9 @@ module.exports = function(app) {
 				'fName': firstName,
 				'lName': lastName,
 				'userID': grootsID,
-				'groupName': defaultGroup
+				'groupName': 'Group Name'
 			});
-			});
+			// });
 	
 		});
 	});
