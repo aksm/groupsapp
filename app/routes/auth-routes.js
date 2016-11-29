@@ -82,7 +82,7 @@ module.exports = function(app) {
 	    consumerKey: process.env.L_CLIENT_ID,
 	    consumerSecret: process.env.L_CLIENT_SECRET,
 	    // callbackURL: 'http://localhost:3000/login/linkedin/return',
-	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/linkedin/return'
 	  },
 	   function(request, accessToken, refreshToken, profile, done) {
 	      return done(null, profile);
@@ -159,26 +159,43 @@ module.exports = function(app) {
 		options[provider+'_id'] = id;
 	    User.findOrCreate({where: options})
 		  .spread(function(user, created) {
-		    var groupStatus = user.get({plain: true}).groups === 0;
+		    var groupStatus = user.get({plain: true}).groups === 0 || req.query.group === 'addjoin';
 		    var notRegistered = !user.get({plain: true}).registered;
 		    var grootsID = user.get({plain: true}).user_id;
 		    var showHide = !notRegistered && groupStatus ? "show": "hide";
-			// Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
-			// 	}).then(function(group) {
-		 //    var defaultGroup = group.get({plain: true}).org_name;
-			res.render('dashboard', {
-				'notRegistered': notRegistered,
-				'groupsZero': groupStatus,
-				'display': showHide,
-				'email': email,
-				'name': userName,
-				'fName': firstName,
-				'lName': lastName,
-				'userID': grootsID,
-				'groupName': 'Group Name'
-			});
-			// });
-	
+		    var defaultGroupID = user.get({plain: true}).default_group;
+		    if(defaultGroupID === null) {
+				res.render('dashboard', {
+					'notRegistered': notRegistered,
+					'groupsZero': groupStatus,
+					'display': showHide,
+					'email': email,
+					'name': userName,
+					'fName': firstName,
+					'lName': lastName,
+					'userID': grootsID,
+					'groupName': 'Group Name',
+					'groupsplus': req.query.group
+				});
+
+		    } else {
+				Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
+					}).then(function(group) {
+					    var defaultGroup = group.get({plain: true}).org_name;
+						res.render('dashboard', {
+							'notRegistered': notRegistered,
+							'groupsZero': groupStatus,
+							'display': showHide,
+							'email': email,
+							'name': userName,
+							'fName': firstName,
+							'lName': lastName,
+							'userID': grootsID,
+							'groupName': defaultGroup,
+							'dismiss': req.query.group
+						});
+					});
+			}
 		});
 	});
 
@@ -272,8 +289,8 @@ module.exports = function(app) {
 
 			    })
 				  .spread(function(groupmember, created) {
-				  	console.log(groupmember);
-				  	console.log(created);
+				  	// console.log(groupmember);
+				  	// console.log(created);
 				  	if(created === true) {
 							User.update(
 								{

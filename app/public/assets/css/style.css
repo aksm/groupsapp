@@ -140,6 +140,7 @@ footer.page-footer {
   transform: scale(1);
 }
 
+/*Styling for drag-and-drop*/
 .ui-state-hover {
   background: #795548;   
 }
