@@ -82,7 +82,7 @@ module.exports = function(app) {
 	    consumerKey: process.env.L_CLIENT_ID,
 	    consumerSecret: process.env.L_CLIENT_SECRET,
 	    // callbackURL: 'http://localhost:3000/login/linkedin/return',
-	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/google/return'
+	    callbackURL: 'https://blooming-mesa-49377.herokuapp.com/login/linkedin/return'
 	  },
 	   function(request, accessToken, refreshToken, profile, done) {
 	      return done(null, profile);
