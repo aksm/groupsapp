@@ -45,7 +45,9 @@ function show(element) {
     });
 
     // dashboard code
-    $('#select-group').modal({dismissible: false});
+    if ($('#select-group').data('dismiss') !== 'addjoin') {
+	    $('#select-group').modal({dismissible: false});
+    }
     $('#select-group').modal('open');
     $('.group-action').on('click', function() {
     	hide($('.group-action'));

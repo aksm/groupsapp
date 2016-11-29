@@ -8,6 +8,7 @@
         <li><a href="#">Events</a></li>
         <li><a href="#">Volunteer</a></li>
         <li><a href="#">Members</a></li>
+        <li><a href="/dashboard?group=addjoin">Add/Join Group</a></li>
         <li><a id="logout" href="/logout">Logout</li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse show-on-large left"><i class="material-icons">menu</i></a>
@@ -43,7 +44,7 @@
 
     </div>
     {{#if groupsZero}}
-    <div id="select-group" class="modal">
+    <div id="select-group" class="modal" data-dismiss="{{dismiss}}">
       <div class="modal-content">
       {{#if notRegistered}}
           {{!-- Registration form --}}
@@ -58,12 +59,10 @@
             </div>
             <div class="row">
               <div class="input-field col s12 m6">
-{{!--                 <i class="material-icons prefix green-text text-accent-4">person</i> --}}
                 <input name="firstName" id="first-name" value="{{fName}}" type="text" class="validate" required="required">
                 <label for="first-name">First Name</label>
               </div>
               <div class="input-field col s12 m6">
-{{!--                 <i class="material-icons prefix green-text text-accent-4">person</i> --}}
                 <input name="lastName" id="last-name" value="{{lName}}" type="text" class="validate" required="required">
                 <label for="last-name">Last Name</label>
               </div>
