@@ -37,11 +37,6 @@ var sqlUser = sequelize.define("User", {
 },
 {
     timestamps: false
-},
-{
-  getterMethods: {
-    groupCount: function() {return this.getDataValue("groups");}
-  }
 });
 
 // Sync with DB

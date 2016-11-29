@@ -15,6 +15,7 @@ var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
 var User = require('../models/Users.js');
 var Organization = require('../models/Organizations.js');
+var GroupMembership = require('../models/GroupMemberships.js');
 var shortid = require('shortid');
 
 // Use this to validate what Passport returns from each strategy
@@ -162,6 +163,9 @@ module.exports = function(app) {
 		    var notRegistered = !user.get({plain: true}).registered;
 		    var grootsID = user.get({plain: true}).user_id;
 		    var showHide = !notRegistered && groupStatus ? "show": "hide";
+			Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
+				}).then(function(group) {
+		    var defaultGroup = group.get({plain: true}).org_name;
 			res.render('dashboard', {
 				'notRegistered': notRegistered,
 				'groupsZero': groupStatus,
@@ -171,8 +175,10 @@ module.exports = function(app) {
 				'fName': firstName,
 				'lName': lastName,
 				'userID': grootsID,
-				'groupName': 'Group Name'
+				'groupName': defaultGroup
 			});
+			});
+	
 		});
 	});
 
@@ -248,6 +254,55 @@ module.exports = function(app) {
 					});
 			break;
 			case 'join':
+				Organization.findOne({where: {org_shortcode: req.body.groupID}
+				}).then(function(group) {
+					// console.log(group);
+					if(group === null) {
+						res.redirect('/dashboard');
+					} else {
+			    GroupMembership.findOrCreate({
+			    	where: {
+			    		group_id: group.dataValues.org_id,
+			    		member_id: req.body.userID
+			    	},
+			    	defaults: {
+			    		group_id: group.dataValues.org_id,
+			    		member_id: req.body.userID
+			    	},
+
+			    })
+				  .spread(function(groupmember, created) {
+				  	console.log(groupmember);
+				  	console.log(created);
+				  	if(created === true) {
+							User.update(
+								{
+									groups: User.sequelize.literal('groups +1')
+								},
+								{
+									where: {user_id: req.body.userID}
+								})
+								.then(function(result) {
+									User.findOne({where: {user_id: req.body.userID}
+								}).then(function(user) {
+									// console.log(user);
+									// console.log(group);
+									user.updateAttributes({
+										default_group: group.dataValues.org_id
+									}).then(function(result) {
+										console.log(result);
+									});
+								});
+
+								}, function(rejectedPromiseError) {
+									console.log(rejectedPromiseError);
+								});
+
+				  	}
+				  	res.redirect('/dashboard');
+				  });
+				  }
+				});
 			break;
 			default:
 				console.log('Oopsy. What happened?');
@@ -277,7 +332,6 @@ module.exports = function(app) {
 	/////////////////////////////////
 	///Logout///////////////////////
 	///////////////////////////////
-	// document.getElementById("logout").addEventListener("click", function() {
     app.get('/logout', ensureAuthenticated, function(req, res) {
         req.logout();
         res.redirect('/');
