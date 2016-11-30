@@ -6,9 +6,11 @@
  * Made By MaterializeCSS.com
  */
 
-nav ul a,
-nav .brand-logo {
-  color: #444;
+nav {
+  height: 80px;
+}
+#logo {
+  margin-right: 28.5px;
 }
 
 /*Classes to hide and show elements with jQuery*/

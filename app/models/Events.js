@@ -13,7 +13,7 @@ var Event = sequelize.define("Event", {
   event_start_date: Sequelize.DATE,
   event_end_date: Sequelize.DATE,
   created_date: Sequelize.DATE,
-  org_shortcode: Sequelize.STRING,
+  org_id: Sequelize.INTEGER,
   event_name: Sequelize.STRING,
   description: Sequelize.STRING,
   url: Sequelize.STRING,

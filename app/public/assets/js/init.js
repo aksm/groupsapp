@@ -45,9 +45,15 @@ function show(element) {
     });
 
     // dashboard code
+
+    // Initialize group name dropdown
+    $('#user-groups').dropdown();
+
+  	// Make the modal for add/join group dismissible when user has at least one group
     if ($('#select-group').data('dismiss') !== 'addjoin') {
 	    $('#select-group').modal({dismissible: false});
     }
+
     $('#select-group').modal('open');
     $('.group-action').on('click', function() {
     	hide($('.group-action'));
@@ -70,7 +76,7 @@ function show(element) {
 			center: 'title',
 			right: 'month,basicWeek,basicDay'
 		},
-		defaultDate: '2016-09-12',
+		defaultDate: moment(),
 		navLinks: true, // can click day/week names to navigate views
 		editable: true,
 		eventLimit: true, // allow "more" link when too many events
@@ -122,51 +128,55 @@ function show(element) {
 			},
 			{
 				title: 'Birthday Party',
-				start: '2016-09-13T07:00:00'
+				start: '2016-11-29T07:00:00'
 			},
 			{
 				title: 'Click for Google',
 				url: 'http://google.com/',
 				start: '2016-09-28'
 			}
-		]
+		],
+		eventRender: function(event, element) {
+			element.attr('href', '#calendar-event');
+		}
 	});
 
-$.fn.swap = function(b){ 
-    // method from: http://blog.pengoworks.com/index.cfm/2008/9/24/A-quick-and-dirty-swap-method-for-jQuery
-    b = jQuery(b)[0]; 
-    var a = this[0]; 
-    var t = a.parentNode.insertBefore(document.createTextNode(''), a); 
-    b.parentNode.insertBefore(a, b); 
-    t.parentNode.insertBefore(b, t); 
-    t.parentNode.removeChild(t); 
-    return this; 
-};
+	// The next three blocks govern drag-and-drop functionality.
+	$.fn.swap = function(b){ 
+	    // method from: http://blog.pengoworks.com/index.cfm/2008/9/24/A-quick-and-dirty-swap-method-for-jQuery
+	    b = jQuery(b)[0]; 
+	    var a = this[0]; 
+	    var t = a.parentNode.insertBefore(document.createTextNode(''), a); 
+	    b.parentNode.insertBefore(a, b); 
+	    t.parentNode.insertBefore(b, t); 
+	    t.parentNode.removeChild(t); 
+	    return this; 
+	};
 
 
-$('.dragdrop').draggable({ revert: true, helper: 'clone' });
+	$('.dragdrop').draggable({ revert: true, helper: 'clone' });
 
-$('.dragdrop').droppable({
-    accept: '.dragdrop',
-    activeClass: 'ui-state-hover',
-    hoverClass: 'ui-state-active',
-    drop: function( event, ui ) {
+	$('.dragdrop').droppable({
+	    accept: '.dragdrop',
+	    activeClass: 'ui-state-hover',
+	    hoverClass: 'ui-state-active',
+	    drop: function( event, ui ) {
 
-        var draggable = ui.draggable, droppable = $(this),
-            dragPos = draggable.position(), dropPos = droppable.position();
-        
-        draggable.css({
-            left: dropPos.left+'px',
-            top: dropPos.top+'px'
-        });
+	        var draggable = ui.draggable, droppable = $(this),
+	            dragPos = draggable.position(), dropPos = droppable.position();
+	        
+	        draggable.css({
+	            left: dropPos.left+'px',
+	            top: dropPos.top+'px'
+	        });
 
-        droppable.css({
-            left: dragPos.left+'px',
-            top: dragPos.top+'px'
-        });
-        draggable.swap(droppable);
-    }
-});
+	        droppable.css({
+	            left: dragPos.left+'px',
+	            top: dragPos.top+'px'
+	        });
+	        draggable.swap(droppable);
+	    }
+	});
 
   }); // end of document ready
 })(jQuery); // end of jQuery name space

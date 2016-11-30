@@ -164,7 +164,7 @@ module.exports = function(app) {
 		    var grootsID = user.get({plain: true}).user_id;
 		    var showHide = !notRegistered && groupStatus ? "show": "hide";
 		    var defaultGroupID = user.get({plain: true}).default_group;
-		    if(defaultGroupID === null) {
+		    if(defaultGroupID == null) {
 				res.render('dashboard', {
 					'notRegistered': notRegistered,
 					'groupsZero': groupStatus,
@@ -174,7 +174,7 @@ module.exports = function(app) {
 					'fName': firstName,
 					'lName': lastName,
 					'userID': grootsID,
-					'groupName': 'Group Name',
+					'groupName': 'groots',
 					'groupsplus': req.query.group
 				});
 
@@ -182,18 +182,33 @@ module.exports = function(app) {
 				Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
 					}).then(function(group) {
 					    var defaultGroup = group.get({plain: true}).org_name;
-						res.render('dashboard', {
-							'notRegistered': notRegistered,
-							'groupsZero': groupStatus,
-							'display': showHide,
-							'email': email,
-							'name': userName,
-							'fName': firstName,
-							'lName': lastName,
-							'userID': grootsID,
-							'groupName': defaultGroup,
-							'dismiss': req.query.group
-						});
+					    Organization.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
+					    GroupMembership.belongsTo(Organization, {foreignKey: 'group_id', targetKey: 'org_id'});
+					    GroupMembership.findAll({
+					   		where:{member_id: grootsID},
+					   		include: [{model: Organization, required: true}]
+					    }).then(function(memberGroups) {
+					    	// console.log(memberGroups);
+					    	var groups = [];
+
+					    	memberGroups.forEach(function(k) {
+					    		// console.log(k);
+					    		groups.push(k.Organization.dataValues.org_name);
+					    	});
+							res.render('dashboard', {
+								'notRegistered': notRegistered,
+								'groupsZero': groupStatus,
+								'display': showHide,
+								'email': email,
+								'name': userName,
+								'fName': firstName,
+								'lName': lastName,
+								'userID': grootsID,
+								'groupName': defaultGroup,
+								'dismiss': req.query.group,
+								'userGroups': groups
+							});
+					    });
 					});
 			}
 		});
@@ -254,6 +269,21 @@ module.exports = function(app) {
 										default_group: group.dataValues.org_id
 									}).then(function(result) {
 										console.log(result);
+					    GroupMembership.findOrCreate({
+					    	where: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	},
+					    	defaults: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	}
+
+					    })
+						  .spread(function(groupmember, created) {
+						  	// console.log(groupmember);
+						  	// console.log(created);
+						  });
 									});
 								});
 
@@ -277,48 +307,60 @@ module.exports = function(app) {
 					if(group === null) {
 						res.redirect('/dashboard');
 					} else {
-			    GroupMembership.findOrCreate({
-			    	where: {
-			    		group_id: group.dataValues.org_id,
-			    		member_id: req.body.userID
-			    	},
-			    	defaults: {
-			    		group_id: group.dataValues.org_id,
-			    		member_id: req.body.userID
-			    	},
+					    GroupMembership.findOrCreate({
+					    	where: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	},
+					    	defaults: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	}
 
-			    })
-				  .spread(function(groupmember, created) {
-				  	// console.log(groupmember);
-				  	// console.log(created);
-				  	if(created === true) {
-							User.update(
-								{
-									groups: User.sequelize.literal('groups +1')
-								},
-								{
-									where: {user_id: req.body.userID}
-								})
-								.then(function(result) {
-									User.findOne({where: {user_id: req.body.userID}
-								}).then(function(user) {
-									// console.log(user);
-									// console.log(group);
-									user.updateAttributes({
-										default_group: group.dataValues.org_id
-									}).then(function(result) {
-										console.log(result);
-									});
-								});
+					    })
+						  .spread(function(groupmember, created) {
+						  	// console.log(groupmember);
+						  	// console.log(created);
+						  	if(created === true) {
+									User.update(
+										{
+											groups: User.sequelize.literal('groups +1')
+										},
+										{
+											where: {user_id: req.body.userID}
+										})
+										.then(function(result) {
+											User.findOne({where:
+												{
+													user_id: req.body.userID,
+													groups: 1
+												}
+											}).then(function(user) {
+												// console.log(user);
+												// console.log(group);
+												user.updateAttributes({
+													default_group: group.dataValues.org_id
+												}).then(function(result) {
+													console.log(result);
+												    Organization.update(
+												    	{
+												    		member_count: Organization.sequelize.literal('member_count +1')
+												    	},
+												    	{
+												    		where: {org_id: group.dataValues.org_id}
+												    	
+												    	});
+												});
+											});
 
-								}, function(rejectedPromiseError) {
-									console.log(rejectedPromiseError);
-								});
+											}, function(rejectedPromiseError) {
+												console.log(rejectedPromiseError);
+											});
 
-				  	}
-				  	res.redirect('/dashboard');
-				  });
-				  }
+						  	}
+						  	res.redirect('/dashboard');
+						  });
+				    }
 				});
 			break;
 			default:
