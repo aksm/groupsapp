@@ -1,6 +1,9 @@
+selector = HTML::Selector.new "input[type=text]"
+selectedCalendar = selector.select()
+
 require 'googlecalendar'
 g = GData.new
-g.login(user_email, user_password)
+token = g.login(user_email, user_password)
 event = { :title     => eventTitle,
           :content   => eventDesc,
           :author    => eventAdmin,
@@ -8,5 +11,4 @@ event = { :title     => eventTitle,
           :where     => eventLocation,
           :startTime => eventStartDate,
           :endTime   => eventEndDate}
-g.new_event(event)
-Quick Add
+g.new_event(event, selectedCalendar)
