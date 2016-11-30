@@ -18,8 +18,6 @@
         {{#each userGroups}}
         <li><a href="/dashboard?groupcode={{orgCode}}" class="green-text text-accent-4 center">{{orgName}}</a></li>
         {{/each}}
-{{!--         <li><a href="#" class="green-text text-accent-4 center">Group Two</a></li>
-        <li><a href="#" class="green-text text-accent-4 center">Group Three</a></li> --}}
       </ul>
       <h4 class="white green-text text-accent-4">{{groupName}}</h2>
       </div>
@@ -30,16 +28,23 @@
   </nav>
   <section>
     <div class="row">
-
+      {{#if admin}}
       <div id="volunteer" class="col s12 m12 l3 dragdrop">
+      {{else}}
+      <div id="volunteer" class="col s12 m12 l3">
+      {{/if}}      
         <div class=card>
           <div class="card-content">
             <span class="card-title">Volunteer</span>
           </div>
         </div>
       </div>
-
+      {{#if admin}}
       <div id="events" class="col s12 m12 l6 dragdrop">
+      {{else}}
+      <div id="events" class="col s12 m12 l6">
+      {{/if}}
+
 
         <div class=card>
           <div class="card-content">
@@ -56,7 +61,7 @@
                     <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
                   </div>
                 </div>
-
+          {{#if admin}}
           <div class="row button-row">
             
             {{!-- Button to add event and modal form. --}}
@@ -80,12 +85,15 @@
               </div>
             </div>
 
-          </div>
-
+          </div><!--Button row-->
+          {{/if}}
         </div>
       </div>
-
+      {{#if admin}}
       <div id="member" class="col s12 m12 l3 dragdrop">
+      {{else}}
+      <div id="member" class="col s12 m12 l3">
+      {{/if}}
         <div class=card>
           <div class="card-content">
             <span class="card-title">Member</span>

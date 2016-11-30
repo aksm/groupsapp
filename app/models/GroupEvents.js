@@ -4,7 +4,7 @@ var Sequelize = require("sequelize");
 // sequelize (lowercase) references my connection to the DB. You could name it something else, but I was just following their convention.
 var sequelize = require("../config/connection.js"); 
 
-var Event = sequelize.define("Event", {
+var GroupEvent = sequelize.define("GroupEvent", {
   event_id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -12,7 +12,11 @@ var Event = sequelize.define("Event", {
   },
   event_start_date: Sequelize.DATE,
   event_end_date: Sequelize.DATE,
-  created_date: Sequelize.DATE,
+  created_date: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW,
+    allowNull: false
+  },
   org_id: Sequelize.INTEGER,
   event_name: Sequelize.STRING,
   description: Sequelize.STRING,
@@ -24,6 +28,6 @@ var Event = sequelize.define("Event", {
 });
 
 // Sync with DB
-Event.sync();
+GroupEvent.sync();
 
-module.exports = Event;
+module.exports = GroupEvent;

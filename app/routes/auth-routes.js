@@ -181,6 +181,7 @@ module.exports = function(app) {
 		    } else {
 				Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
 					}).then(function(group) {
+					    var defaultAdminID = group.get({plain: true}).admin_id;
 					    var defaultGroup = group.get({plain: true}).org_name;
 					    Organization.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    GroupMembership.belongsTo(Organization, {foreignKey: 'group_id', targetKey: 'org_id'});
@@ -190,12 +191,31 @@ module.exports = function(app) {
 					    }).then(function(memberGroups) {
 					    	// console.log(memberGroups);
 					    	var groups = [];
+				    		var admin;
+
+				    		// Do admin check for initial login
+				    		if(defaultAdminID == grootsID) {
+				    			admin = true;
+				    		} else {
+				    			admin = false;
+				    		}
+				    		
 					    	memberGroups.forEach(function(k) {
 					    		// console.log(k);
 					    		var orgName = k.Organization.dataValues.org_name;
 					    		var orgCode = k.Organization.dataValues.org_shortcode;
+					    		var adminID = k.Organization.dataValues.admin_id;
+
+					    		// Check for user-selected group and set appropriate variables
 					    		if(req.query.groupcode == orgCode) {
 					    			defaultGroup = orgName;
+						    		// Check if user is admin of selected group and pass handlebars variables to restrict dom elements
+						    		if(adminID == grootsID) {
+						    			admin = true;
+						    		} else {
+						    			admin = false;
+						    		}
+
 					    		} else {
 						    		var groupObject = {
 						    			'orgName': orgName,
@@ -203,6 +223,7 @@ module.exports = function(app) {
 						    		};
 						    		groups.push(groupObject);
 					    		}
+
 					    	});
 							res.render('dashboard', {
 								'notRegistered': notRegistered,
@@ -215,7 +236,8 @@ module.exports = function(app) {
 								'userID': grootsID,
 								'groupName': defaultGroup,
 								'dismiss': req.query.group,
-								'userGroups': groups
+								'userGroups': groups,
+								'admin': admin
 							});
 					    });
 					});
