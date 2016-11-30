@@ -190,10 +190,19 @@ module.exports = function(app) {
 					    }).then(function(memberGroups) {
 					    	// console.log(memberGroups);
 					    	var groups = [];
-
 					    	memberGroups.forEach(function(k) {
 					    		// console.log(k);
-					    		groups.push(k.Organization.dataValues.org_name);
+					    		var orgName = k.Organization.dataValues.org_name;
+					    		var orgCode = k.Organization.dataValues.org_shortcode;
+					    		if(req.query.groupcode == orgCode) {
+					    			defaultGroup = orgName;
+					    		} else {
+						    		var groupObject = {
+						    			'orgName': orgName,
+						    			'orgCode': orgCode
+						    		};
+						    		groups.push(groupObject);
+					    		}
 					    	});
 							res.render('dashboard', {
 								'notRegistered': notRegistered,

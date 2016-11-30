@@ -14,9 +14,9 @@
       <a href="#" data-activates="nav-mobile" class="button-collapse show-on-large left green-text text-accent-4"><i class="material-icons">menu</i></a>
     </div>
       <div class="col s4 center dropdown-button hoverable" data-activates="user-groups">
-      <ul id="user-groups" class="dropdown-content" data-usergroups="{{userGroups}}">
+      <ul id="user-groups" class="dropdown-content">
         {{#each userGroups}}
-        <li><a href="#" class="green-text text-accent-4 center">{{this}}</a></li>
+        <li><a href="/dashboard?groupcode={{orgCode}}" class="green-text text-accent-4 center">{{orgName}}</a></li>
         {{/each}}
 {{!--         <li><a href="#" class="green-text text-accent-4 center">Group Two</a></li>
         <li><a href="#" class="green-text text-accent-4 center">Group Three</a></li> --}}
