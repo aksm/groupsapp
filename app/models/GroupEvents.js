@@ -19,7 +19,7 @@ var GroupEvent = sequelize.define("GroupEvent", {
   },
   org_id: Sequelize.INTEGER,
   event_name: Sequelize.STRING,
-  description: Sequelize.STRING,
+  event_description: Sequelize.TEXT,
   url: Sequelize.STRING,
   img: Sequelize.STRING
 },

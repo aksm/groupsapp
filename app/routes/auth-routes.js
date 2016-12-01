@@ -13,14 +13,25 @@ var session = require('express-session');
 var memoryStore = require('session-memory-store')(session);
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
+var moment = require('moment');
+var shortid = require('shortid');
+
+// Import models
 var User = require('../models/Users.js');
 var Organization = require('../models/Organizations.js');
 var GroupMembership = require('../models/GroupMemberships.js');
-var shortid = require('shortid');
+var GroupEvent = require('../models/GroupEvents.js');
 
 // Use this to validate what Passport returns from each strategy
 function undefinedCheck(value) {
 	return value === undefined ? '' : value;
+}
+
+// DateTime converter
+function datetime(date, time) {
+	var convertDate = moment(date, 'DD-MMMM-YYYY').format('YYYY-MM-DD');
+	var convertTime = moment(time, 'hh:mm:A').format('HH:mm:ss');
+	return convertDate+' '+convertTime;
 }
 
 module.exports = function(app) {
@@ -192,6 +203,7 @@ module.exports = function(app) {
 					    	// console.log(memberGroups);
 					    	var groups = [];
 				    		var admin;
+				    		var groupcode;
 
 				    		// Do admin check for initial login
 				    		if(defaultAdminID == grootsID) {
@@ -199,16 +211,19 @@ module.exports = function(app) {
 				    		} else {
 				    			admin = false;
 				    		}
-				    		
+
 					    	memberGroups.forEach(function(k) {
 					    		// console.log(k);
 					    		var orgName = k.Organization.dataValues.org_name;
 					    		var orgCode = k.Organization.dataValues.org_shortcode;
 					    		var adminID = k.Organization.dataValues.admin_id;
+					    		var orgID = k.Organization.dataValues.org_id;
 
 					    		// Check for user-selected group and set appropriate variables
 					    		if(req.query.groupcode == orgCode) {
 					    			defaultGroup = orgName;
+					    			defaultGroupID = orgID;
+					    			groupcode = req.query.groupcode;
 						    		// Check if user is admin of selected group and pass handlebars variables to restrict dom elements
 						    		if(adminID == grootsID) {
 						    			admin = true;
@@ -237,7 +252,9 @@ module.exports = function(app) {
 								'groupName': defaultGroup,
 								'dismiss': req.query.group,
 								'userGroups': groups,
-								'admin': admin
+								'admin': admin,
+								'groupID': defaultGroupID,
+								'groupcode': groupcode
 							});
 					    });
 					});
@@ -418,6 +435,39 @@ module.exports = function(app) {
 	//         });
 	//     }
 	// ));
+
+	app.post('/event/:action?', ensureAuthenticated, function(req, res) {
+		// console.log(req);
+		console.log(req.body);
+		console.log(req.params);
+		var date1 = req.body.startDate;
+		var time1 = req.body.startTime;
+		var date2 = req.body.endDate;
+		var time2 = req.body.endTime;
+
+		switch(req.params.action) {
+			case 'add':
+			console.log(req.body.startTime);
+			    GroupEvent.create({
+			    	event_start_date: datetime(date1, time1),
+			    	event_end_date: datetime(date2, time2),
+			    	org_id: req.body.groupID,
+			    	event_name: req.body.eventName,
+			    	event_description: req.body.eventDescription
+
+			    })
+				  .then(function(event) {
+				  	res.redirect('/dashboard?groupcode='+req.body.groupcode);
+				});
+
+
+			break;
+			case 'update':
+			break;
+			default:
+			console.log('Oopsy. What happened?');
+		}
+	});
 
 	/////////////////////////////////
 	///Logout///////////////////////
