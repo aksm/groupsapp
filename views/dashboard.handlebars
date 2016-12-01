@@ -49,18 +49,30 @@
         <div class=card>
           <div class="card-content">
             <span class="card-title">Events</span>
-            <div id="calendar" class="container"></div>
+            <div id="calendar" class="container" data-events="{{events}}"></div>
           </div>
-          
+                {{#if admin}}
                 <div id="calendar-event" class="modal">
                   <div class="modal-content">
-                    <h4>Modal Header</h4>
+                    <h4 class="center">Event Tasks</h4>
                     <p>A bunch of text</p>
                   </div>
                   <div class="modal-footer">
-                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green green white-text accent-4 btn-flat">Create Volunteer Opportunity</a>
                   </div>
                 </div>
+                {{else}}
+                <div id="calendar-event" class="modal">
+                  <div class="modal-content">
+                    <h4 class="center">Event Tasks</h4>
+                    <p>A bunch of text</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green green white-text accent-4 btn-flat">Add Event To My Calendar</a>
+                  </div>
+                </div>
+
+                {{/if}}
           {{#if admin}}
           <div class="row button-row">
             

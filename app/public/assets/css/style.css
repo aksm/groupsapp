@@ -150,6 +150,8 @@ footer.page-footer {
   background: #00c853;   
 }
 
+
+/*Everything below for time picker styling*/
 .picker__holder.green-picker .picker__date-display,
 .picker__holder.green-picker .picker__day--selected,
 .picker__holder.green-picker .picker__day--selected:hover,

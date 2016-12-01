@@ -195,15 +195,23 @@ module.exports = function(app) {
 					    var defaultAdminID = group.get({plain: true}).admin_id;
 					    var defaultGroup = group.get({plain: true}).org_name;
 					    Organization.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
+					    Organization.hasMany(GroupEvent, {foreignKey: 'org_id', targetKey: 'org_id'});
+					    // GroupEvent.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
+					    GroupEvent.belongsTo(Organization, {foreignKey: 'org_id', targetKey: 'org_id'});
+					    // GroupMembership.belongsTo(GroupEvent, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    GroupMembership.belongsTo(Organization, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    GroupMembership.findAll({
 					   		where:{member_id: grootsID},
-					   		include: [{model: Organization, required: true}]
+					   		include: [{model: Organization, required: true, include:
+					   			[{model: GroupEvent, required: false}]
+					   		}]
 					    }).then(function(memberGroups) {
 					    	// console.log(memberGroups);
 					    	var groups = [];
 				    		var admin;
 				    		var groupcode;
+				    		var events = [];
+				    		var eventsObject;
 
 				    		// Do admin check for initial login
 				    		if(defaultAdminID == grootsID) {
@@ -213,11 +221,31 @@ module.exports = function(app) {
 				    		}
 
 					    	memberGroups.forEach(function(k) {
-					    		// console.log(k);
+					    		console.log(k);
 					    		var orgName = k.Organization.dataValues.org_name;
+					    		// console.log(orgName);
 					    		var orgCode = k.Organization.dataValues.org_shortcode;
 					    		var adminID = k.Organization.dataValues.admin_id;
 					    		var orgID = k.Organization.dataValues.org_id;
+					    		var groupEvents = k.Organization.GroupEvents;
+					    		console.log(groupEvents);
+
+					    		// if(defaultGroupID == orgID) {
+						    	// 	if(groupEvents.length > 0) {
+						    	// 		groupEvents.forEach(function(event) {
+								   //  		var eventObject = {
+								   //  			'id': event.event_id,
+								   //  			'title': event.event_name,
+								   //  			'start': event.event_start_date,
+								   //  			'end': event.event_end_date,
+								   //  			'description': event.event_description
+								   //  		};
+								   //  		events.push(eventObject);
+
+						    	// 		});
+						    	// 	}
+					    			
+					    		// }
 
 					    		// Check for user-selected group and set appropriate variables
 					    		if(req.query.groupcode == orgCode) {
@@ -229,6 +257,19 @@ module.exports = function(app) {
 						    			admin = true;
 						    		} else {
 						    			admin = false;
+						    		}
+						    		if(groupEvents.length > 0) {
+						    			groupEvents.forEach(function(event) {
+								    		var eventObject = {
+								    			'id': event.event_id,
+								    			'title': event.event_name,
+								    			'start': event.event_start_date,
+								    			'end': event.event_end_date,
+								    			'description': event.event_description
+								    		};
+								    		events.push(eventObject);
+
+						    			});
 						    		}
 
 					    		} else {
@@ -254,7 +295,8 @@ module.exports = function(app) {
 								'userGroups': groups,
 								'admin': admin,
 								'groupID': defaultGroupID,
-								'groupcode': groupcode
+								'groupcode': groupcode,
+								'events': JSON.stringify(events)
 							});
 					    });
 					});
