@@ -160,8 +160,12 @@ function show(element) {
 		// ],
 		eventRender: function(event, element) {
 			element.attr('href', '#calendar-event');
-			element.data('eventID', event.id);
+			element.attr('data-eventid', event.id);
 		}
+	});
+
+	$('.fc-day-grid-event').on('click', function() {
+		$('#task-event-id').val($(this).data('eventid'));
 	});
 
 	// The next three blocks govern drag-and-drop functionality.

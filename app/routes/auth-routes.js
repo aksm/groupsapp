@@ -21,6 +21,7 @@ var User = require('../models/Users.js');
 var Organization = require('../models/Organizations.js');
 var GroupMembership = require('../models/GroupMemberships.js');
 var GroupEvent = require('../models/GroupEvents.js');
+var Task = require('../models/Tasks.js');
 
 // Use this to validate what Passport returns from each strategy
 function undefinedCheck(value) {
@@ -196,9 +197,7 @@ module.exports = function(app) {
 					    var defaultGroup = group.get({plain: true}).org_name;
 					    Organization.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    Organization.hasMany(GroupEvent, {foreignKey: 'org_id', targetKey: 'org_id'});
-					    // GroupEvent.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    GroupEvent.belongsTo(Organization, {foreignKey: 'org_id', targetKey: 'org_id'});
-					    // GroupMembership.belongsTo(GroupEvent, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    GroupMembership.belongsTo(Organization, {foreignKey: 'group_id', targetKey: 'org_id'});
 					    GroupMembership.findAll({
 					   		where:{member_id: grootsID},
@@ -244,7 +243,7 @@ module.exports = function(app) {
 
 						    	// 		});
 						    	// 	}
-					    			
+
 					    		// }
 
 					    		// Check for user-selected group and set appropriate variables
@@ -489,7 +488,6 @@ module.exports = function(app) {
 
 		switch(req.params.action) {
 			case 'add':
-			console.log(req.body.startTime);
 			    GroupEvent.create({
 			    	event_start_date: datetime(date1, time1),
 			    	event_end_date: datetime(date2, time2),
@@ -497,6 +495,31 @@ module.exports = function(app) {
 			    	event_name: req.body.eventName,
 			    	event_description: req.body.eventDescription
 
+			    })
+				  .then(function(event) {
+				  	res.redirect('/dashboard?groupcode='+req.body.groupcode);
+				});
+
+
+			break;
+			case 'update':
+			break;
+			default:
+			console.log('Oopsy. What happened?');
+		}
+	});
+
+	app.post('/task/:action?', ensureAuthenticated, function(req, res) {
+		// console.log(req);
+		console.log(req.body);
+		console.log(req.params);
+
+		switch(req.params.action) {
+			case 'add':
+			    Task.create({
+			    	task_name: req.body.taskName,
+			    	event_id: req.body.eventID,
+			    	volunteers_needed: req.body.taskVolunteers,
 			    })
 				  .then(function(event) {
 				  	res.redirect('/dashboard?groupcode='+req.body.groupcode);

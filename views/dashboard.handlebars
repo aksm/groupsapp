@@ -55,11 +55,29 @@
                 <div id="calendar-event" class="modal">
                   <div class="modal-content">
                     <h4 class="center">Event Tasks</h4>
-                    <p>A bunch of text</p>
+                    <form method="POST" class="col s12 center-align" id="volunteer-add-form" action="/task/add?_method=POST">
+                      <input type="hidden" name="groupcode" value="{{groupcode}}">
+                      <input type="hidden" name="eventID" id="task-event-id">
+                      <div class="row">
+                        <div class="input-field col s6">
+                          <input id="task-name" name="taskName" type="text" class="validate" required="required">
+                          <label for="task-name">Task Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                          <i class="material-icons prefix green-text text-accent-4">group</i>
+                          <input id="task-volunteers" name="taskVolunteers" type="number" class="validate" required="required">
+                          <label for="task-volunteers">Volunteers Needed</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                      <button class="btn waves-effect waves-light green accent-4" type="submit" name="action">Create Volunteer Opportunity
+                      </button>
+                      </div>
+                    </form>
                   </div>
-                  <div class="modal-footer">
+{{!--                   <div class="modal-footer">
                     <a href="#!" class="modal-action modal-close waves-effect waves-green green white-text accent-4 btn-flat">Create Volunteer Opportunity</a>
-                  </div>
+                  </div> --}}
                 </div>
                 {{else}}
                 <div id="calendar-event" class="modal">
