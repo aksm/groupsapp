@@ -1,0 +1,5 @@
+# Gemfile
+source 'https://rubygems.org'
+
+gem 'devise', github: 'twalpole/devise', branch: 'rails5'
+gem 'omniauth-google-oauth2'
