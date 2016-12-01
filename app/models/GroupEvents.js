@@ -20,8 +20,8 @@ var GroupEvent = sequelize.define("GroupEvent", {
   org_id: Sequelize.INTEGER,
   event_name: Sequelize.STRING,
   event_description: Sequelize.TEXT,
-  url: Sequelize.STRING,
-  img: Sequelize.STRING
+  event_url: Sequelize.STRING,
+  event_img: Sequelize.STRING
 },
 {
     timestamps: false
