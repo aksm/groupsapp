@@ -2,6 +2,7 @@ var Event = require("../models/GroupEvents.js");
 var Organization = require("../models/Organizations.js");
 var Task = require("../models/Tasks.js");
 var sqlUser = require("../models/Users.js");
+var google_calendar = require("../calendar/calendar.js");
 
 module.exports = function(app) {
 
