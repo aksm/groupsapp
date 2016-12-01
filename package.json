@@ -30,6 +30,7 @@
     "handlebars": "^4.0.6",
     "materialize-css": "^0.97.8",
     "method-override": "^2.3.7",
+    "moment": "^2.17.0",
     "morgan": "^1.7.0",
     "mysql": "^2.12.0",
     "passport": "^0.3.2",

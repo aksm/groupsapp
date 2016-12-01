@@ -1,4 +1,4 @@
-var Event = require("../models/Events.js");
+var Event = require("../models/GroupEvents.js");
 var Organization = require("../models/Organizations.js");
 var Task = require("../models/Tasks.js");
 var sqlUser = require("../models/Users.js");

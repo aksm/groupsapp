@@ -13,14 +13,25 @@ var session = require('express-session');
 var memoryStore = require('session-memory-store')(session);
 var methodOverride = require('method-override');
 var bodyParser = require('body-parser');
+var moment = require('moment');
+var shortid = require('shortid');
+
+// Import models
 var User = require('../models/Users.js');
 var Organization = require('../models/Organizations.js');
 var GroupMembership = require('../models/GroupMemberships.js');
-var shortid = require('shortid');
+var GroupEvent = require('../models/GroupEvents.js');
 
 // Use this to validate what Passport returns from each strategy
 function undefinedCheck(value) {
 	return value === undefined ? '' : value;
+}
+
+// DateTime converter
+function datetime(date, time) {
+	var convertDate = moment(date, 'DD-MMMM-YYYY').format('YYYY-MM-DD');
+	var convertTime = moment(time, 'hh:mm:A').format('HH:mm:ss');
+	return convertDate+' '+convertTime;
 }
 
 module.exports = function(app) {
@@ -164,7 +175,7 @@ module.exports = function(app) {
 		    var grootsID = user.get({plain: true}).user_id;
 		    var showHide = !notRegistered && groupStatus ? "show": "hide";
 		    var defaultGroupID = user.get({plain: true}).default_group;
-		    if(defaultGroupID === null) {
+		    if(defaultGroupID == null) {
 				res.render('dashboard', {
 					'notRegistered': notRegistered,
 					'groupsZero': groupStatus,
@@ -174,26 +185,78 @@ module.exports = function(app) {
 					'fName': firstName,
 					'lName': lastName,
 					'userID': grootsID,
-					'groupName': 'Group Name',
+					'groupName': 'groots',
 					'groupsplus': req.query.group
 				});
 
 		    } else {
 				Organization.findOne({where: {org_id: user.get({plain: true}).default_group}
 					}).then(function(group) {
+					    var defaultAdminID = group.get({plain: true}).admin_id;
 					    var defaultGroup = group.get({plain: true}).org_name;
-						res.render('dashboard', {
-							'notRegistered': notRegistered,
-							'groupsZero': groupStatus,
-							'display': showHide,
-							'email': email,
-							'name': userName,
-							'fName': firstName,
-							'lName': lastName,
-							'userID': grootsID,
-							'groupName': defaultGroup,
-							'dismiss': req.query.group
-						});
+					    Organization.hasMany(GroupMembership, {foreignKey: 'group_id', targetKey: 'org_id'});
+					    GroupMembership.belongsTo(Organization, {foreignKey: 'group_id', targetKey: 'org_id'});
+					    GroupMembership.findAll({
+					   		where:{member_id: grootsID},
+					   		include: [{model: Organization, required: true}]
+					    }).then(function(memberGroups) {
+					    	// console.log(memberGroups);
+					    	var groups = [];
+				    		var admin;
+				    		var groupcode;
+
+				    		// Do admin check for initial login
+				    		if(defaultAdminID == grootsID) {
+				    			admin = true;
+				    		} else {
+				    			admin = false;
+				    		}
+
+					    	memberGroups.forEach(function(k) {
+					    		// console.log(k);
+					    		var orgName = k.Organization.dataValues.org_name;
+					    		var orgCode = k.Organization.dataValues.org_shortcode;
+					    		var adminID = k.Organization.dataValues.admin_id;
+					    		var orgID = k.Organization.dataValues.org_id;
+
+					    		// Check for user-selected group and set appropriate variables
+					    		if(req.query.groupcode == orgCode) {
+					    			defaultGroup = orgName;
+					    			defaultGroupID = orgID;
+					    			groupcode = req.query.groupcode;
+						    		// Check if user is admin of selected group and pass handlebars variables to restrict dom elements
+						    		if(adminID == grootsID) {
+						    			admin = true;
+						    		} else {
+						    			admin = false;
+						    		}
+
+					    		} else {
+						    		var groupObject = {
+						    			'orgName': orgName,
+						    			'orgCode': orgCode
+						    		};
+						    		groups.push(groupObject);
+					    		}
+
+					    	});
+							res.render('dashboard', {
+								'notRegistered': notRegistered,
+								'groupsZero': groupStatus,
+								'display': showHide,
+								'email': email,
+								'name': userName,
+								'fName': firstName,
+								'lName': lastName,
+								'userID': grootsID,
+								'groupName': defaultGroup,
+								'dismiss': req.query.group,
+								'userGroups': groups,
+								'admin': admin,
+								'groupID': defaultGroupID,
+								'groupcode': groupcode
+							});
+					    });
 					});
 			}
 		});
@@ -254,6 +317,21 @@ module.exports = function(app) {
 										default_group: group.dataValues.org_id
 									}).then(function(result) {
 										console.log(result);
+					    GroupMembership.findOrCreate({
+					    	where: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	},
+					    	defaults: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	}
+
+					    })
+						  .spread(function(groupmember, created) {
+						  	// console.log(groupmember);
+						  	// console.log(created);
+						  });
 									});
 								});
 
@@ -277,48 +355,60 @@ module.exports = function(app) {
 					if(group === null) {
 						res.redirect('/dashboard');
 					} else {
-			    GroupMembership.findOrCreate({
-			    	where: {
-			    		group_id: group.dataValues.org_id,
-			    		member_id: req.body.userID
-			    	},
-			    	defaults: {
-			    		group_id: group.dataValues.org_id,
-			    		member_id: req.body.userID
-			    	},
+					    GroupMembership.findOrCreate({
+					    	where: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	},
+					    	defaults: {
+					    		group_id: group.dataValues.org_id,
+					    		member_id: req.body.userID
+					    	}
 
-			    })
-				  .spread(function(groupmember, created) {
-				  	// console.log(groupmember);
-				  	// console.log(created);
-				  	if(created === true) {
-							User.update(
-								{
-									groups: User.sequelize.literal('groups +1')
-								},
-								{
-									where: {user_id: req.body.userID}
-								})
-								.then(function(result) {
-									User.findOne({where: {user_id: req.body.userID}
-								}).then(function(user) {
-									// console.log(user);
-									// console.log(group);
-									user.updateAttributes({
-										default_group: group.dataValues.org_id
-									}).then(function(result) {
-										console.log(result);
-									});
-								});
+					    })
+						  .spread(function(groupmember, created) {
+						  	// console.log(groupmember);
+						  	// console.log(created);
+						  	if(created === true) {
+									User.update(
+										{
+											groups: User.sequelize.literal('groups +1')
+										},
+										{
+											where: {user_id: req.body.userID}
+										})
+										.then(function(result) {
+											User.findOne({where:
+												{
+													user_id: req.body.userID,
+													groups: 1
+												}
+											}).then(function(user) {
+												// console.log(user);
+												// console.log(group);
+												user.updateAttributes({
+													default_group: group.dataValues.org_id
+												}).then(function(result) {
+													console.log(result);
+												    Organization.update(
+												    	{
+												    		member_count: Organization.sequelize.literal('member_count +1')
+												    	},
+												    	{
+												    		where: {org_id: group.dataValues.org_id}
+												    	
+												    	});
+												});
+											});
 
-								}, function(rejectedPromiseError) {
-									console.log(rejectedPromiseError);
-								});
+											}, function(rejectedPromiseError) {
+												console.log(rejectedPromiseError);
+											});
 
-				  	}
-				  	res.redirect('/dashboard');
-				  });
-				  }
+						  	}
+						  	res.redirect('/dashboard');
+						  });
+				    }
 				});
 			break;
 			default:
@@ -345,6 +435,39 @@ module.exports = function(app) {
 	//         });
 	//     }
 	// ));
+
+	app.post('/event/:action?', ensureAuthenticated, function(req, res) {
+		// console.log(req);
+		console.log(req.body);
+		console.log(req.params);
+		var date1 = req.body.startDate;
+		var time1 = req.body.startTime;
+		var date2 = req.body.endDate;
+		var time2 = req.body.endTime;
+
+		switch(req.params.action) {
+			case 'add':
+			console.log(req.body.startTime);
+			    GroupEvent.create({
+			    	event_start_date: datetime(date1, time1),
+			    	event_end_date: datetime(date2, time2),
+			    	org_id: req.body.groupID,
+			    	event_name: req.body.eventName,
+			    	event_description: req.body.eventDescription
+
+			    })
+				  .then(function(event) {
+				  	res.redirect('/dashboard?groupcode='+req.body.groupcode);
+				});
+
+
+			break;
+			case 'update':
+			break;
+			default:
+			console.log('Oopsy. What happened?');
+		}
+	});
 
 	/////////////////////////////////
 	///Logout///////////////////////

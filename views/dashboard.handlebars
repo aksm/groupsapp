@@ -1,8 +1,8 @@
   <nav class="white" role="navigation">
     <div class="nav-wrapper">
-      <a id="group-name" href="#" class="brand-logo center">{{groupName}}</a>
-      <a id="logo-container" href="#" class="brand-logo right"><img src="assets/images/logo.png" class="responsive-img" id="logo"></a>
-
+{{!--       <a id="group-name" href="#" class="brand-logo center">{{groupName}}</a> --}}
+      <div class="row nav-row">
+      <div class="col s4 left">
       <ul id="nav-mobile" class="side-nav">
         <li><a href="#">Dashboard</a></li>
         <li><a href="#">Events</a></li>
@@ -11,30 +11,135 @@
         <li><a href="/dashboard?group=addjoin">Add/Join Group</a></li>
         <li><a id="logout" href="/logout">Logout</li>
       </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse show-on-large left"><i class="material-icons">menu</i></a>
+      <a href="#" data-activates="nav-mobile" class="button-collapse show-on-large left green-text text-accent-4"><i class="material-icons">menu</i></a>
+    </div>
+      <div class="col s4 center dropdown-button hoverable" data-activates="user-groups">
+      <ul id="user-groups" class="dropdown-content">
+        {{#each userGroups}}
+        <li><a href="/dashboard?groupcode={{orgCode}}" class="green-text text-accent-4 center">{{orgName}}</a></li>
+        {{/each}}
+      </ul>
+      <h4 class="white green-text text-accent-4">{{groupName}}</h2>
+      </div>
+      <div class="col s4">
+      <a id="logo-container" href="#" class="brand-logo right"><img src="assets/images/logo.png" class="responsive-img" id="logo"></a>
+      </div>
     </div>
   </nav>
   <section>
     <div class="row">
-
+      {{#if admin}}
       <div id="volunteer" class="col s12 m12 l3 dragdrop">
+      {{else}}
+      <div id="volunteer" class="col s12 m12 l3">
+      {{/if}}      
         <div class=card>
           <div class="card-content">
             <span class="card-title">Volunteer</span>
           </div>
         </div>
       </div>
-
+      {{#if admin}}
       <div id="events" class="col s12 m12 l6 dragdrop">
+      {{else}}
+      <div id="events" class="col s12 m12 l6">
+      {{/if}}
+
+
         <div class=card>
           <div class="card-content">
             <span class="card-title">Events</span>
             <div id="calendar" class="container"></div>
           </div>
+          
+                <div id="calendar-event" class="modal">
+                  <div class="modal-content">
+                    <h4>Modal Header</h4>
+                    <p>A bunch of text</p>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+                  </div>
+                </div>
+          {{#if admin}}
+          <div class="row button-row">
+            
+            {{!-- Button to add event and modal form. --}}
+            <div class="col s4 hoverable event-add">
+              <div class="card-action">
+                <a class="green-text text-accent-4" href="#event-add">Add Event</a>
+
+                <div id="event-add" class="modal">
+                  <div class="modal-content">
+                    <h4 class="center">Add an Event</h4>
+                    <form method="POST" class="col s12 center-align event-post" id="event-add-form" action="/event/add?_method=POST">
+                      <input type="hidden" name="groupcode" value="{{groupcode}}">
+                      <input type="hidden" name="groupID" value="{{groupID}}">
+                      <div class="row">
+                        <div class="input-field col s6">
+                          <i class="material-icons prefix green-text text-accent-4">today</i>
+                          <input id="event-start-date" name="startDate" type="date" class="validate datepicker" required="required">
+                          <label for="event-start-date">Start Date</label>
+                        </div>
+                        <div class="input-field col s6">
+                          <i class="material-icons prefix green-text text-accent-4">schedule</i>
+                          <input id="event-start-time" name="startTime" type="text" class="validate time timepicker" required="required">
+                          <label for="event-start-time">Start Time</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s6">
+                          <i class="material-icons prefix green-text text-accent-4">today</i>
+                          <input id="event-end-date" name="endDate" type="date" class="validate datepicker" required="required">
+                          <label for="event-end-date">End Date</label>
+                        </div>
+                        <div class="input-field col s6">
+                          <i class="material-icons prefix green-text text-accent-4">schedule</i>
+                          <input id="event-end-time" name="endTime" type="text" class="validate time timepicker" required="required">
+                          <label for="event-end-time">End Time</label>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <input id="event-name" name="eventName" type="text" class="validate" required="required">
+                          <label for="event-name">Event Name</label>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <textarea id="event-description" name="eventDescription" type="text" class="validate materialize-textarea" required="required"></textarea>
+                          <label for="event-description">Event Description</label>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                      <button class="btn waves-effect waves-light green accent-4 center" type="submit" name="action">Add Event
+                      </button>
+                      </div>
+
+                    </form>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col s8 event-add">
+              <div class="card-action">
+              </div>
+            </div>
+
+          </div><!--Button row-->
+          {{/if}}
         </div>
       </div>
-
+      {{#if admin}}
       <div id="member" class="col s12 m12 l3 dragdrop">
+      {{else}}
+      <div id="member" class="col s12 m12 l3">
+      {{/if}}
         <div class=card>
           <div class="card-content">
             <span class="card-title">Member</span>
