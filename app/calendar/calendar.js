@@ -1,9 +1,9 @@
-var gcal = require('google-calendar');
+var googlecal = require('google-calendar');
 var google_calendar = new gcal.GoogleCalendar(accessToken);
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var passport = require('passport');
-var gcal     = require('google-calendar');
+
  
 passport.use(new GoogleStrategy({
     clientID: config.consumer_key,
