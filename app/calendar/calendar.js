@@ -19,17 +19,17 @@
 //   }
 // ));
 
-var google_calendar = new gcal.GoogleCalendar(accessToken);
+// var google_calendar = new gcal.GoogleCalendar(accessToken);
  
-google_calendar.calendarList.list(function(err, calendarList) {
+// google_calendar.calendarList.list(function(err, calendarList) {
   
   // ...
   
-  google_calendar.events.list(calendarId, function(err, calendarList) {
+  // google_calendar.events.list(calendarId, function(err, calendarList) {
     
     // ...
-  });
-});
+//   });
+// });
 
-module.exports = google_calendar;
+// module.exports = google_calendar;
 
