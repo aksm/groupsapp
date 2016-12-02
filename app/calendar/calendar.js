@@ -23,11 +23,11 @@ var google_calendar = new gcal.GoogleCalendar(accessToken);
  
 google_calendar.calendarList.list(function(err, calendarList) {
   
-  ...
+  // ...
   
   google_calendar.events.list(calendarId, function(err, calendarList) {
     
-    ...
+    // ...
   });
 });
 
